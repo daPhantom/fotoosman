@@ -2,50 +2,50 @@
 
 var logger;
 
-function WhowLogger() {
-    var whowLogger = {};
+function PhntmLogger() {
+    var phntmLogger = {};
     var logLevel = require('loglevel');
     var moment = require('moment');
 
-    whowLogger.__proto__ = logLevel;
+    phntmLogger.__proto__ = logLevel;
 
-    whowLogger.trace = function() {
+    phntmLogger.trace = function() {
         for (var i = 0; i < arguments.length; i++) {
             logLevel.trace(moment().format(), '[TRACE]', arguments[i]);
         }
     };
-    whowLogger.debug = function() {
+    phntmLogger.debug = function() {
         for (var i = 0; i < arguments.length; i++) {
             logLevel.debug(moment().format(), '[DEBUG]', arguments[i]);
         }
     };
-    whowLogger.info = function() {
+    phntmLogger.info = function() {
         for (var i = 0; i < arguments.length; i++) {
             logLevel.info(moment().format(), '[INFO]', arguments[i]);
         }
     };
-    whowLogger.warn = function() {
+    phntmLogger.warn = function() {
         for (var i = 0; i < arguments.length; i++) {
             logLevel.warn(moment().format(), '[WARN]', arguments[i]);
         }
     };
-    whowLogger.error = function() {
+    phntmLogger.error = function() {
         for (var i = 0; i < arguments.length; i++) {
             logLevel.error(moment().format(), '[ERROR]', arguments[i]);
         }
     };
-    whowLogger.stat = function() {
+    phntmLogger.stat = function() {
         for (var i = 0; i < arguments.length; i++) {
             logLevel.info(moment().format(), '[STAT]', arguments[i]);
         }
     };
 
-    return whowLogger;
+    return phntmLogger;
 }
 
 exports.logger = function() {
     if(typeof logger === 'undefined') {
-        logger = new WhowLogger();
+        logger = new PhntmLogger();
     }
 
     return logger;
@@ -65,7 +65,7 @@ exports.microtime = function(get_as_float) {
 };
 
 /**
- * overwrite native console.log with new whowLogger
+ * overwrite native console.log with new phntmLogger
  */
 (function(){
     if(console.log){
