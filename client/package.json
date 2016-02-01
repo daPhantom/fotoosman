@@ -1,0 +1,24 @@
+{
+  "name": "fotoosman",
+  "description": "",
+  "version": "0.0.1",
+  "main": "client.js",
+  "devDependencies": {},
+  "dependencies": {
+    "package-script": "0.0.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daPhantom/fotoosman.git"
+  },
+  "author": "daPhantom",
+  "bugs": {
+    "url": "https://github.com/daPhantom/fotoosman/issues"
+  },
+  "homepage": "https://github.com/daPhantom/fotoosman#readme",
+  "scripts": {
+    "install": "node installer.js",
+    "build": "browserify client.js -o public/js/bundle.js --full-path=false",
+    "watch": "watchify client.js -o public/js/bundle.js --debug --verbose --full-path=false"
+  }
+}
