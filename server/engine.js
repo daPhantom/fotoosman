@@ -22,7 +22,7 @@ Engine.prototype = {
       this.clients.set(conn.id, conn);
       Utils.logger().info("adding new client to list with connection " + conn.id);
 
-	  var msg = {type: "video", url: "https://www.youtube.com/embed/YqBLxzn6kcU"};
+	  var msg = {type: "video", name: "Brody Quest", url: "https://www.youtube.com/embed/YqBLxzn6kcU"};
 	  this.sendToClient(conn, msg);
 	},
 

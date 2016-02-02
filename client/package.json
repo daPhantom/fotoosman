@@ -1,11 +1,15 @@
 {
   "name": "fotoosman",
-  "description": "",
+  "description": "most awesome client",
+  "license": "ISC",
   "version": "0.0.1",
   "main": "client.js",
   "devDependencies": {},
   "dependencies": {
-    "package-script": "0.0.8"
+    "bootstrap": "^3.3.6",
+    "jquery": "^2.2.0",
+    "package-script": "0.0.8",
+    "sockjs-client": "^1.0.3"
   },
   "repository": {
     "type": "git",

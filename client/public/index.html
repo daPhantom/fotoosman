@@ -10,6 +10,9 @@
         <meta property="og:url" content="http://fotoosman.de/" />
         <meta property="og:site_name" content="http://fotoosman.de/" />
         <meta property="fb:admins" content="100000522776045" />
+
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
+
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-35682571-1']);
@@ -25,7 +28,9 @@
     </head>
     <body style="margin: 0; background-color:#000000">
         <script src="js/bundle.js"></script>
+
         <div id="fb-root"></div>
+
         <script>(function(d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) return;
@@ -34,14 +39,10 @@
             fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));
         </script>
-        <div style="float: left; width: 27%; color: #FFF; padding-top: 20px; padding-left: 20px;">
-            <div style="clear: both;">
-                <div style="float: left;">---></div>
-                <div style="float: left;">
-                    <a style="color: #FFF; width: 100px; height: 15px;" href="/?v=0">Wolfgangs Freund - Wolfgang, pass auf!</a>
-                </div>
-                <div style="float: left;"><---</div>
-            </div>
+
+        <div id="list" style="float: left; width: 27%; color: #FFF; padding-top: 20px; padding-left: 20px;">
+
+            <!-- JS MAGIC HAPPENS HERE -->
 
             <div style="margin-top: 50px; clear: both;">
                 <div style="float: left" class="fb-like" data-href="http://fotoosman.de" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-colorscheme="dark"></div>
@@ -58,8 +59,20 @@
                 </script>
             </div>
         </div>
+
         <div style="float: right; width: 70%; height: 90%; border: 0px;">
             <iframe id="video" style="width: 100%; height: 100%;" src="https://www.youtube.com/embed/ItqQ2EZziB8?&rel=0&autoplay=1&controls=0&iv_load_policy=3" frameborder="0"></iframe>
+        </div>
+
+        <div id="loader" class="modal hide" data-backdrop="static" data-keyboard="false">
+            <div class="modal-header">
+                <h1>Waiting for response from server...</h1>
+            </div>
+            <div class="modal-body">
+                <div class="progress progress-striped active">
+                    <div class="bar" style="width: 100%;"></div>
+                </div>
+            </div>
         </div>
     </body>
 </html>
