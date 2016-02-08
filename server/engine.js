@@ -57,8 +57,18 @@ Engine.prototype = {
 
 	sendToClient: function(conn, message) {
 		if(conn.writable) {
+			if(typeof message !== 'string') {
+				try {
+					message = JSON.stringify(message);
+				} catch(e) {
+					Utils.logger().error("error stringifying message: " + e.message);
+					return false;
+				}
+			}
+
 			Utils.logger().info("sending message to connection " + conn.id + " with data: " + message);
-			return conn.write(JSON.stringify(message));
+
+			return conn.write(message);
 		}
 
 		return false;
