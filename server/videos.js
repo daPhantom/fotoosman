@@ -23,7 +23,7 @@ Videos.prototype = {
     },
 
     getRandom: function() {
-        return this.get(Math.floor(Math.random()*this.videos.length));
+        return this.get(Math.floor(Math.random() * this.videos.length));
     },
 
     all: function() {
