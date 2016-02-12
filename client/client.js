@@ -25,11 +25,15 @@ $(document).ready(function() {
         var message = JSON.parse(e.data);
 
         switch(message.type) {
+            case 'switch':
+                play(message.uuid, false);
+                break;
             case 'video':
                 // $('body').append(Elements.newVideo(message.video.uuid));
                 $('#list').prepend(Elements.videoEntry(message.video.uuid));
                 videos[message.video.uuid] = message.video;
-                play(message.video.uuid);
+
+                play(message.video.uuid, false);
 
                 break;
             case 'videos':
@@ -40,7 +44,7 @@ $(document).ready(function() {
                     videos[video.uuid] = video;
                 });
 
-                play(uuid);
+                play(uuid, false);
 
                 break;
 
@@ -70,7 +74,12 @@ $(document).ready(function() {
         return sendMessage(message);
     }
 
-    function play(uuid) {
+    function sendSwitchToServer(uuid) {
+        var message = {type: "switch", uuid: uuid};
+        return sendMessage(message);
+    }
+
+    function play(uuid, clicked) {
         var video = videos[uuid];
         var url = false;
 
@@ -86,6 +95,10 @@ $(document).ready(function() {
         }
 
         if(url) {
+            if(clicked) {
+                sendSwitchToServer(uuid);
+            }
+
             $('#video').attr('src', url);
         }
     }
@@ -112,4 +125,5 @@ $(document).ready(function() {
     global.hideLoader = hideLoader;
     global.play = play;
     global.videos = videos;
+    global.$ = $;
 });

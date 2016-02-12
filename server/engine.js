@@ -21,6 +21,11 @@ Engine.prototype = {
                         return this.broadcast(msg);
                     }
                 break;
+                
+            case 'switch':
+                var msg = {type: "switch", uuid: msg.uuid};
+                return this.broadcast(msg);
+                break;
 
             default:
                 Utils.logger().warn('received unknown incoming subscribe message from type ' + msg.type);
