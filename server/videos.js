@@ -32,9 +32,9 @@ Videos.prototype = {
 
     add: function(url) {
         if(url.indexOf('youtu') !== -1) {
-            this.addYouTube(url);
+            return this.addYouTube(url);
         } else if(url.indexOf('youpo') !== -1) {
-            this.addYouPorn(url);
+            return this.addYouPorn(url);
         }
     },
 
@@ -49,8 +49,10 @@ Videos.prototype = {
         }
 
         if(video) {
-            this.videos.push({type: "yt", uuid: Utils.uuid(), code: video});
+            video = {type: "yt", uuid: Utils.uuid(), code: video};
+            this.videos.push(video);
             Utils.logger().info("Added youtube video to list. Code: " + video);
+            return video;
         }
     },
 
@@ -65,8 +67,10 @@ Videos.prototype = {
         }
 
         if(video) {
-            this.videos.push({type: "yp", uuid: Utils.uuid(), code: video});
+            video = {type: "yp", uuid: Utils.uuid(), code: video};
+            this.videos.push(video);
             Utils.logger().info("Added youporn video to list. Code: " + video);
+            return video;
         }
     }
 };

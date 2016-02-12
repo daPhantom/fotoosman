@@ -1,6 +1,6 @@
 "use strict";
 
-exports.videoEntry = function(uuid, url) {
+exports.videoEntry = function(uuid) {
     return '<div style="clear: both;">'
         + '<div style="float: left;">---></div>'
         + '<div style="float: left;">'
@@ -8,4 +8,8 @@ exports.videoEntry = function(uuid, url) {
         + '</div>'
         + '<div style="float: left;"><---</div>'
     + '</div>';
+};
+
+exports.newVideo = function(uuid) {
+    return '<div style="background-color:#e9ffd9; position: absolute; width: 100%; bottom: 50px; height: 20px;border:1px solid #a6ca8a;"><span>New Video: </span> Check it out!</div>';
 };

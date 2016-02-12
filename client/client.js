@@ -24,15 +24,17 @@ $(document).ready(function() {
 
         switch(message.type) {
             case 'video':
-                var url = message.url + '?&rel=0&autoplay=1&controls=0&iv_load_policy=3';
-                $('#list').prepend(Elements.videoEntry(message.name, url));
-                play(url);
+                // $('body').append(Elements.newVideo(message.video.uuid));
+                $('#list').prepend(Elements.videoEntry(message.video.uuid));
+                videos[message.video.uuid] = message.video;
+                play(message.video.uuid);
+
                 break;
             case 'videos':
                 var uuid = false;
                 message.videos.forEach(function(video) {
                     uuid = video.uuid;
-                    $('#list').prepend(Elements.videoEntry(video.uuid, url));
+                    $('#list').prepend(Elements.videoEntry(video.uuid));
                     videos[video.uuid] = video;
                 });
 
@@ -97,6 +99,7 @@ $(document).ready(function() {
     $('#input').bind("input propertychange", function(e) {
         var value = $('#input').val();
         sendVideoToServer(value);
+        $('#input').val('');
     })
 
 

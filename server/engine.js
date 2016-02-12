@@ -14,7 +14,12 @@ Engine.prototype = {
     handleIncomingClientMessage: function(conn, msg) {
         switch (msg.type) {
             case 'add':
-                    Videos.add(msg.url);
+                    var video = Videos.add(msg.url);
+                    Utils.logger().trace(video);
+                    if(typeof video === 'object') {
+                        var msg = {type: "video", video: video};
+                        return this.broadcast(msg);
+                    }
                 break;
 
             default:
@@ -30,32 +35,13 @@ Engine.prototype = {
       this.sendToClient(conn, msg);
     },
 
-    sendToClients: function(userId, message) {
-        if (this.clients.has(userId)) {
-            for (var connId of this.clients.get(userId).keys()) {
-                var conn = this.clients.get(userId).get(connId);
-
-                if(!this.sendToClient(conn, message)) {
-                    this.removeConnection(userId, conn);
-                    //break;
-                }
-            }
-        } else {
-            Utils.logger().info("can't push data to a non connected userId");
-        }
-    },
-
     broadcast: function(message) {
-        for(var userId of this.clients.keys()) {
-            for (var connId of this.clients.get(userId).keys()) {
-                var conn = this.clients.get(userId).get(connId);
-
-                if(!this.sendToClient(conn, message)) {
-                    this.removeConnection(userId, conn);
-                    //break;
-                }
+        for(var connId of this.clients.keys()) {
+            var conn = this.clients.get(connId);
+            if(!this.sendToClient(conn, message)) {
+                this.removeConnection(conn);
+                //break;
             }
-
         }
     },
 
