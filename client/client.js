@@ -13,6 +13,8 @@ $(document).ready(function() {
 
     var videoFrame = $('#video');
 
+    var lastInput = '';
+
     sock.onopen = function() {
         hideLoader();
         console.log('open');
@@ -98,7 +100,10 @@ $(document).ready(function() {
 
     $('#input').bind("input propertychange", function(e) {
         var value = $('#input').val();
-        sendVideoToServer(value);
+        if(value !== lastInput) {
+            lastInput = value;
+            sendVideoToServer(value);
+        }
         $('#input').val('');
     })
 
