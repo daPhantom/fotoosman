@@ -7,55 +7,62 @@ require('bootstrap');
 $(document).ready(function() {
     var videos = {};
 
-    showLoader();
-
-    var sock = new SockJS('http://localhost:7005/client');
+    var sock = null;
+    var sockInterval = null;
 
     var videoFrame = $('#video');
 
     var lastInput = '';
 
-    sock.onopen = function() {
-        hideLoader();
-        console.log('open');
+    var new_sock = function() {
+        sock = new SockJS('http://localhost:7005/client');
+        clearInterval(sockInterval);
+
+        sock.onopen = function() {
+            $('#list').html('');
+            hideLoader();
+        };
+
+        sock.onclose = function() {
+            showLoader();
+            sock = null;
+            sockInterval = setInterval(function() {
+                new_sock();
+            }, 2000);
+        };
+
+        sock.onmessage = function(e) {
+            var message = JSON.parse(e.data);
+
+            switch(message.type) {
+                case 'switch':
+                    play(message.uuid, false);
+                    break;
+                case 'video':
+                    // $('body').append(Elements.newVideo(message.video.uuid));
+                    $('#list').prepend(Elements.videoEntry(message.video.uuid));
+                    videos[message.video.uuid] = message.video;
+
+                    play(message.video.uuid, false);
+
+                    break;
+                case 'videos':
+                    var uuid = false;
+                    message.videos.forEach(function(video) {
+                        uuid = video.uuid;
+                        $('#list').prepend(Elements.videoEntry(video.uuid));
+                        videos[video.uuid] = video;
+                    });
+
+                    play(uuid, false);
+
+                    break;
+
+            }
+        };
     };
 
-    sock.onmessage = function(e) {
-        showLoader();
-        var message = JSON.parse(e.data);
-
-        switch(message.type) {
-            case 'switch':
-                play(message.uuid, false);
-                break;
-            case 'video':
-                // $('body').append(Elements.newVideo(message.video.uuid));
-                $('#list').prepend(Elements.videoEntry(message.video.uuid));
-                videos[message.video.uuid] = message.video;
-
-                play(message.video.uuid, false);
-
-                break;
-            case 'videos':
-                var uuid = false;
-                message.videos.forEach(function(video) {
-                    uuid = video.uuid;
-                    $('#list').prepend(Elements.videoEntry(video.uuid));
-                    videos[video.uuid] = video;
-                });
-
-                play(uuid, false);
-
-                break;
-
-        }
-        hideLoader();
-    };
-
-    sock.onclose = function() {
-        showLoader();
-        console.log('close');
-    };
+    new_sock();
 
     function sendMessage(message) {
         if(typeof message !== 'string') {
@@ -122,7 +129,6 @@ $(document).ready(function() {
         }
         $('#input').val('');
     })
-
 
     global.showLoader = showLoader;
     global.hideLoader = hideLoader;
