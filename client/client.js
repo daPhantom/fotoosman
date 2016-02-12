@@ -91,6 +91,9 @@ $(document).ready(function() {
                 case 'yp':
                     url = 'http://www.youporn.com/embed/' + video.code;
                     break;
+                case 'v':
+                    url = 'https://player.vimeo.com/video/' + video.code + '?autoplay=1&badge=0&byline=0&color=000000&portrait=0';
+                    break;
             }
         }
 

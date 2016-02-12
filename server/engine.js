@@ -15,13 +15,12 @@ Engine.prototype = {
         switch (msg.type) {
             case 'add':
                     var video = Videos.add(msg.url);
-                    Utils.logger().trace(video);
                     if(typeof video === 'object') {
                         var msg = {type: "video", video: video};
                         return this.broadcast(msg);
                     }
                 break;
-                
+
             case 'switch':
                 var msg = {type: "switch", uuid: msg.uuid};
                 return this.broadcast(msg);

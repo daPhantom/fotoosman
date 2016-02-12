@@ -33,6 +33,8 @@ Videos.prototype = {
     add: function(url) {
         if(url.indexOf('youtu') !== -1) {
             return this.addYouTube(url);
+        } else if(url.indexOf('vimeo') !== -1) {
+            return this.addVimeo(url);
         } else if(url.indexOf('youpo') !== -1) {
             return this.addYouPorn(url);
         }
@@ -51,7 +53,25 @@ Videos.prototype = {
         if(video) {
             video = {type: "yt", uuid: Utils.uuid(), code: video};
             this.videos.push(video);
-            Utils.logger().info("Added youtube video to list. Code: " + video);
+            Utils.logger().info("Added youtube video to list. Code: " + video.code);
+            return video;
+        }
+    },
+
+    addVimeo: function(url) {
+        var video = false;
+
+        var regex = /\/([\d]+)/;
+        var matches = url.match(regex);
+
+        if(typeof matches[1] !== 'undefined') {
+            video = matches[1];
+        }
+
+        if(video) {
+            video = {type: "v", uuid: Utils.uuid(), code: video};
+            this.videos.push(video);
+            Utils.logger().info("Added vimeo video to list. Code: " + video.code);
             return video;
         }
     },
@@ -69,7 +89,7 @@ Videos.prototype = {
         if(video) {
             video = {type: "yp", uuid: Utils.uuid(), code: video};
             this.videos.push(video);
-            Utils.logger().info("Added youporn video to list. Code: " + video);
+            Utils.logger().info("Added youporn video to list. Code: " + video.code);
             return video;
         }
     }
