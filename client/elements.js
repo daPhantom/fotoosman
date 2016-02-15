@@ -7,6 +7,9 @@ exports.videoEntry = function(uuid, type, code) {
         case 'yt':
             image = '//i.ytimg.com/vi/' + code + '/mqdefault.jpg';
             break;
+        case 'yp':
+            image = '//cdn5f.image.youporn.phncdn.com/m=eSuQKgaaaa/noimage.jpg';
+            break;
     }
 
     return '<div class="grid-item ' + type + '" style="background-image: url(\'' + image + '\')" onclick="play(\'' + uuid + '\')"></div>';
