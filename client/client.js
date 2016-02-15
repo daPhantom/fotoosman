@@ -1,6 +1,7 @@
 var SockJS = require('sockjs-client'),
     $ = jQuery = require('jquery'),
-    Elements = require('./elements');
+    Elements = require('./elements'),
+    Masonry = require('masonry-layout');
 
 require('bootstrap');
 
@@ -63,6 +64,11 @@ $(document).ready(function() {
     };
 
     new_sock();
+
+    var msnry = new Masonry('#grid', {
+        itemSelector: '.grid-item',
+        columnWidth: 320
+    });
 
     function sendMessage(message) {
         if(typeof message !== 'string') {

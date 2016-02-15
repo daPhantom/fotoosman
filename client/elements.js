@@ -9,7 +9,7 @@ exports.videoEntry = function(uuid, type, code) {
             break;
     }
 
-    return '<div class="box ' + type + '" style="background-image: url(\'' + image + '\')" onclick="play(\'' + uuid + '\')"></div>';
+    return '<div class="grid-item ' + type + '" style="background-image: url(\'' + image + '\')" onclick="play(\'' + uuid + '\')"></div>';
 };
 
 exports.newVideo = function(uuid) {

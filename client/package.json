@@ -8,6 +8,7 @@
   "dependencies": {
     "bootstrap": "^3.3.6",
     "jquery": "^2.2.0",
+    "masonry-layout": "^4.0.0",
     "package-script": "0.0.8",
     "sockjs-client": "^1.0.3"
   },
