@@ -67,7 +67,7 @@ $(document).ready(function() {
 
     var msnry = new Masonry('#grid', {
         itemSelector: '.grid-item',
-        columnWidth: 320
+        columnWidth: 196
     });
 
     function sendMessage(message) {

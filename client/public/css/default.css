@@ -1,12 +1,11 @@
 #grid {
     width: 100%;
-    height: 360px;
 }
 
 .grid-item {
   float: left;
   cursor: pointer;
-  width: 320px;
-  height: 180px;
-  border: 2px solid hsla(0, 0%, 0%, 0.5);
+  width: 196px;
+  height: 110px;
+  border: 2px solid hsla(300, 100%, 25%, 0.5);
 }

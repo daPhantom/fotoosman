@@ -5,7 +5,7 @@ exports.videoEntry = function(uuid, type, code) {
 
     switch(type) {
         case 'yt':
-            image = '//i.ytimg.com/vi_webp/' + code + '/mqdefault.webp';
+            image = '//i.ytimg.com/vi/' + code + '/mqdefault.jpg';
             break;
     }
 
