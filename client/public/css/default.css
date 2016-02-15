@@ -9,3 +9,9 @@
   height: 110px;
   border: 2px solid hsla(300, 100%, 25%, 0.5);
 }
+
+.grid-item.yt {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+}
