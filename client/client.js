@@ -19,7 +19,7 @@ $(document).ready(function() {
         clearInterval(sockInterval);
 
         sock.onopen = function() {
-            $('#list').html('');
+            $('#grid').html('');
             hideLoader();
         };
 
@@ -40,7 +40,7 @@ $(document).ready(function() {
                     break;
                 case 'video':
                     // $('body').append(Elements.newVideo(message.video.uuid));
-                    $('#list').prepend(Elements.videoEntry(message.video.uuid));
+                    $('#grid').prepend(Elements.videoEntry(message.video.uuid, message.video.type, message.video.code));
                     videos[message.video.uuid] = message.video;
 
                     play(message.video.uuid, false);
@@ -50,7 +50,7 @@ $(document).ready(function() {
                     var uuid = false;
                     message.videos.forEach(function(video) {
                         uuid = video.uuid;
-                        $('#list').prepend(Elements.videoEntry(video.uuid));
+                        $('#grid').prepend(Elements.videoEntry(video.uuid, video.type, video.code));
                         videos[video.uuid] = video;
                     });
 

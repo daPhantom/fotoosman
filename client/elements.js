@@ -1,13 +1,15 @@
 "use strict";
 
-exports.videoEntry = function(uuid) {
-    return '<div style="clear: both;">'
-        + '<div style="float: left;">---></div>'
-        + '<div style="float: left;">'
-            + '<a class="link" href="#" onclick="play(\''+uuid+'\', true)" style="color: #FFF; width: 100px; height: 15px;">'+uuid+'</a>'
-        + '</div>'
-        + '<div style="float: left;"><---</div>'
-    + '</div>';
+exports.videoEntry = function(uuid, type, code) {
+    var image = '';
+
+    switch(type) {
+        case 'yt':
+            image = '//i.ytimg.com/vi_webp/' + code + '/mqdefault.webp';
+            break;
+    }
+
+    return '<div class="box ' + type + '" style="background-image: url(\'' + image + '\')" onclick="play(\'' + uuid + '\')"></div>';
 };
 
 exports.newVideo = function(uuid) {

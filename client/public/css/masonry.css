@@ -1,0 +1,32 @@
+#grid {
+    width: 100%;
+    max-width: 100%;
+    margin: 2em auto;
+    overflow: scroll;
+}
+
+.cols {
+    -moz-column-count:3;
+    -moz-column-gap: 3%;
+    -moz-column-width: 30%;
+    -webkit-column-count:3;
+    -webkit-column-gap: 3%;
+    -webkit-column-width: 30%;
+    column-count: 3;
+    column-gap: 3%;
+    column-width: 30%;
+}
+
+.box {
+    cursor: pointer;
+}
+
+.box.yt {
+    width: 320px;
+    height: 180px;
+}
+
+.box.v {
+    width: 320px;
+    height: 180px;
+}

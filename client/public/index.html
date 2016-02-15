@@ -13,6 +13,7 @@
         <meta property="fb:admins" content="100000522776045" />
 
         <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/masonry.css" rel="stylesheet">
 
         <script type="text/javascript">
             var _gaq = _gaq || [];
@@ -57,33 +58,17 @@
             }(document, 'script', 'facebook-jssdk'));
         </script>
 
-        <div id="list" style="float: left; height: 100%; width: 27%; color: #FFF; padding-top: 20px; padding-left: 20px;">
-
-            <!-- JS MAGIC HAPPENS HERE -->
-
-            <div style="margin-top: 50px; clear: both;">
-                <div style="float: left" class="fb-like" data-href="http://fotoosman.de" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-colorscheme="dark"></div>
-                <div style="padding-top: 25px">&nbsp;</div>
-                <div style="float: left" class="g-plusone" data-size="big" data-annotation="inline" data-width="450"></div>
-                <script type="text/javascript">
-                    window.___gcfg = {lang: 'de', href: 'http://fotoosman.de'};
-
-                    (function() {
-                      var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-                      po.src = 'https://apis.google.com/js/plusone.js';
-                      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-                    })();
-                </script>
-            </div>
-        </div>
-
-        <div style="float: right; width: 70%; height: 90%; border: 0px;">
+        <div style="width: 100%; height: 80%; border: 0px;">
             <div class="input-group" style="width: 95%; margin: 1%;">
                 <span class="input-group-addon glyphicon glyphicon-film" id="basic-addon1"></span>
                 <input id="input" type="text" class="form-control" placeholder="Paste Vimeo or YouTube URL" aria-describedby="basic-addon1">
             </div>
 
             <iframe id="video" style="width: 100%; height: 100%;" src="" frameborder="0"></iframe>
+        </div>
+
+        <div id="grid" class="cols">
+            <!-- JS MAGIC HAPPENS HERE -->
         </div>
     </body>
 </html>
