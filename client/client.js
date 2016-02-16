@@ -44,7 +44,6 @@ $(document).ready(function() {
                     videos[message.video.code] = message.video;
 
                     play(message.video.code, false, 0);
-
                     break;
                 case 'videos':
                     message.videos.forEach(function(video) {
@@ -53,9 +52,7 @@ $(document).ready(function() {
                     });
 
                     play(message.currentVideo.video.code, false, message.currentVideo.elapsed);
-
                     break;
-
             }
         };
     };
@@ -87,16 +84,16 @@ $(document).ready(function() {
         return sendMessage(message);
     }
 
-    function sendSwitchToServer(uuid) {
+    function sendSwitchToServer(code) {
         var message = {
             type: "switch",
-            code: uuid
+            code: code
         };
         return sendMessage(message);
     }
 
-    function play(uuid, clicked, elapsed) {
-        var video = videos[uuid];
+    function play(code, clicked, elapsed) {
+        var video = videos[code];
         var url = false;
 
         if (typeof video === 'object') {
@@ -105,7 +102,7 @@ $(document).ready(function() {
 
         if (url) {
             if (clicked) {
-                sendSwitchToServer(uuid);
+                sendSwitchToServer(code);
             }
 
             $('#video').attr('src', url);
