@@ -1,18 +1,7 @@
 "use strict";
 
-exports.videoEntry = function(uuid, type, code) {
-    var image = '';
-
-    switch(type) {
-        case 'yt':
-            image = '//i.ytimg.com/vi/' + code + '/mqdefault.jpg';
-            break;
-        case 'yp':
-            image = '//cdn5f.image.youporn.phncdn.com/m=eSuQKgaaaa/noimage.jpg';
-            break;
-    }
-
-    return '<div class="grid-item ' + type + '" style="background-image: url(\'' + image + '\')" onclick="play(\'' + uuid + '\')"></div>';
+exports.videoEntry = function(video) {
+    return '<div class="grid-item yt" style="background-image: url(\'' + video.thumb + '\')" onclick="play(\'' + video.code + '\', true)"></div>';
 };
 
 exports.newVideo = function(uuid) {

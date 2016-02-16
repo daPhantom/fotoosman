@@ -8,6 +8,7 @@ var Utils = require('./utils.js'),
 //Constructor
 function Engine() {
     this.clients = new Map();
+    this.videos = new Videos(this);
 }
 
 //Functions
@@ -15,22 +16,11 @@ Engine.prototype = {
     handleIncomingClientMessage: function(conn, msg) {
         switch (msg.type) {
             case 'add':
-                var video = Videos.add(msg.url);
-                if (typeof video === 'object') {
-                    var msg = {
-                        type: "video",
-                        video: video
-                    };
-                    return this.broadcast(msg);
-                }
+                this.videos.add(msg.url);
                 break;
 
             case 'switch':
-                var msg = {
-                    type: "switch",
-                    uuid: msg.uuid
-                };
-                return this.broadcast(msg);
+                this.videos.switch(msg.code);
                 break;
 
             default:
@@ -44,7 +34,8 @@ Engine.prototype = {
         Utils.logger().info("adding new client to list with connection " + conn.id);
         var msg = {
             type: "videos",
-            videos: Videos.all()
+            videos: this.videos.all(),
+            currentVideo: this.videos.getCurrentVideo()
         };
         this.sendToClient(conn, msg);
     },

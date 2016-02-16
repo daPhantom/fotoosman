@@ -13,10 +13,10 @@ if (typeof argv.logLevel !== 'undefined') {
 }
 
 function Server() {
-    //necessary dependencies
+    //dependencies
     var Engine = require('./engine');
 
-    //load main server engine
+    //load engine
     this.engine = new Engine();
 
     //all client servers

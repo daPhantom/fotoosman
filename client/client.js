@@ -35,27 +35,24 @@ $(document).ready(function() {
         sock.onmessage = function(e) {
             var message = JSON.parse(e.data);
 
-            switch(message.type) {
+            switch (message.type) {
                 case 'switch':
-                    play(message.uuid, false);
+                    play(message.code, false);
                     break;
                 case 'video':
-                    // $('body').append(Elements.newVideo(message.video.uuid));
-                    $('#grid').prepend(Elements.videoEntry(message.video.uuid, message.video.type, message.video.code));
-                    videos[message.video.uuid] = message.video;
+                    $('#grid').prepend(Elements.videoEntry(message.video));
+                    videos[message.video.code] = message.video;
 
-                    play(message.video.uuid, false);
+                    play(message.video.code, false);
 
                     break;
                 case 'videos':
-                    var uuid = false;
                     message.videos.forEach(function(video) {
-                        uuid = video.uuid;
-                        $('#grid').prepend(Elements.videoEntry(video.uuid, video.type, video.code));
-                        videos[video.uuid] = video;
+                        $('#grid').prepend(Elements.videoEntry(video));
+                        videos[video.code] = video;
                     });
 
-                    play(uuid, false);
+                    play(message.currentVideo.video.code, false, message.currentVideo.elapsed);
 
                     break;
 
@@ -71,10 +68,10 @@ $(document).ready(function() {
     });
 
     function sendMessage(message) {
-        if(typeof message !== 'string') {
+        if (typeof message !== 'string') {
             try {
                 message = JSON.stringify(message);
-            } catch(e) {
+            } catch (e) {
                 return false;
             }
         }
@@ -83,39 +80,36 @@ $(document).ready(function() {
     }
 
     function sendVideoToServer(url) {
-        var message = {type: "add", url: url};
+        var message = {
+            type: "add",
+            url: url
+        };
         return sendMessage(message);
     }
 
     function sendSwitchToServer(uuid) {
-        var message = {type: "switch", uuid: uuid};
+        var message = {
+            type: "switch",
+            code: uuid
+        };
         return sendMessage(message);
     }
 
-    function play(uuid, clicked) {
+    function play(uuid, clicked, elapsed) {
         var video = videos[uuid];
         var url = false;
 
-        if(typeof video === 'object') {
-            switch(video.type) {
-                case 'yt':
-                    url = 'https://www.youtube.com/embed/' + video.code + '?&rel=0&autoplay=1&controls=0&iv_load_policy=3';
-                    break;
-                case 'yp':
-                    url = 'http://www.youporn.com/embed/' + video.code;
-                    break;
-                case 'v':
-                    url = 'https://player.vimeo.com/video/' + video.code + '?autoplay=1&badge=0&byline=0&color=000000&portrait=0';
-                    break;
-            }
+        if (typeof video === 'object') {
+            url = 'https://www.youtube.com/embed/' + video.code + '?start=' + elapsed + '&rel=0&autoplay=1&controls=0&iv_load_policy=3';
         }
 
-        if(url) {
-            if(clicked) {
+        if (url) {
+            if (clicked) {
                 sendSwitchToServer(uuid);
             }
 
             $('#video').attr('src', url);
+            $('#title').text(video.title);
         }
     }
 
@@ -129,7 +123,7 @@ $(document).ready(function() {
 
     $('#input').bind("input propertychange", function(e) {
         var value = $('#input').val();
-        if(value !== lastInput) {
+        if (value !== lastInput) {
             lastInput = value;
             sendVideoToServer(value);
         }

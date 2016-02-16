@@ -32,7 +32,7 @@
     </script>
 </head>
 
-<body style="margin: 0; background-color:#000000; height: 100%; width: 100%;">
+<body style="margin: 0; background-color:#000; height: 100%; width: 100%; color: #fff">
     <div id="loader" class="modal fade" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" style="background-color: #fff">
             <div class="modal-header">
@@ -64,18 +64,21 @@
         }(document, 'script', 'facebook-jssdk'));
     </script>
 
-    <div style="width: 100%; height: 75%; border: 0px;">
-        <div class="input-group" style="width: 95%; padding: 10px;">
+    <div style="width: 100%; height: 100%; border: 0px;">
+        <div class="input-group" style="width: 95%; padding: 5px;">
             <span class="input-group-addon glyphicon glyphicon-film" id="basic-addon1"></span>
-            <input id="input" type="text" class="form-control" placeholder="Paste Vimeo or YouTube URL" aria-describedby="basic-addon1">
+            <input id="input" type="text" class="form-control" placeholder="Paste YouTube URL" aria-describedby="basic-addon1">
         </div>
 
-        <iframe id="video" style="width: 100%; height: 90%;" src="" frameborder="0"></iframe>
+        <iframe id="video" style="width: 100%; height: 70%;" src="" frameborder="0"></iframe>
+        <div style="width: 100%; text-align: center; padding: 10px">
+            Currently playing: <span id="title"></span>
+        </div>
+        <div id="grid" class="cols">
+            <!-- JS MAGIC HAPPENS HERE -->
+        </div>
     </div>
 
-    <div id="grid" class="cols">
-        <!-- JS MAGIC HAPPENS HERE -->
-    </div>
 </body>
 
 </html>

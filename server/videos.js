@@ -1,103 +1,123 @@
 "use strict";
 
 //Load dependencies
-var Utils = require('./utils.js');
+var Utils = require('./utils.js'),
+    Moment = require('moment'),
+    YouTube = require('./providers/youtube.js');
 
 //Constructor
-function Videos() {
-    this.videos = [];
+function Videos(engine) {
+    this.engine = engine;
+    this.currentVideo = false;
+    this.videos = new Map();
+
+    this.loop();
 }
 
 //Functions
 Videos.prototype = {
-    get: function(index) {
-        var video = this.videos[index];
-        return video;
-    },
-
-    getRandom: function() {
-        return this.get(Math.floor(Math.random() * this.videos.length));
-    },
-
     all: function() {
-        return this.videos;
+        var videoArr = [];
+
+        for (let video of this.videos.values()) {
+            videoArr.push(video);
+        }
+
+        return videoArr;
+    },
+
+    random: function() {
+        var videos = this.all();
+        return videos[Math.floor(Math.random() * videos.length)];
     },
 
     add: function(url) {
         if (url.indexOf('youtu') !== -1) {
-            return this.addYouTube(url);
-        } else if (url.indexOf('vimeo') !== -1) {
-            return this.addVimeo(url);
-        } else if (url.indexOf('youpo') !== -1) {
-            // return this.addYouPorn(url);
+            return this.parseYouTube(url);
         }
     },
 
-    addYouTube: function(url) {
-        var video = false;
+    switch: function(code) {
+        var video = this.videos.get(code);
+
+        if(typeof video !== 'object') {
+            return false;
+        }
+
+        return this.changeCurrentVideo(video);
+    },
+
+    update: function(video) {
+        if(this.videos.has(video.code)) {
+            var msg = {
+                type: "switch",
+                code: video.code
+            };
+        } else {
+            var msg = {
+                type: "video",
+                video: video
+            };
+        }
+
+        return this.engine.broadcast(msg);
+    },
+
+    parseYouTube: function(url) {
+        var self = this;
+
+        var code = false;
 
         var regex = /([\w-]{11})/;
         var matches = url.match(regex);
 
         if (typeof matches[1] !== 'undefined') {
-            video = matches[1];
+            code = matches[1];
         }
 
-        if (video) {
-            video = {
-                type: "yt",
-                uuid: Utils.uuid(),
-                code: video
-            };
-            this.videos.push(video);
-            Utils.logger().info("Added youtube video to list. Code: " + video.code);
-            return video;
-        }
-    },
+        if (code) {
+            YouTube.parse(code, function(data) {
+                var video = {
+                    code: data.id,
+                    title: data.snippet.title,
+                    duration: Moment.duration(data.contentDetails.duration).asSeconds(),
+                    thumb: data.snippet.thumbnails.medium.url
+                };
 
-    addVimeo: function(url) {
-        var video = false;
-
-        var regex = /\/([\d]+)/;
-        var matches = url.match(regex);
-
-        if (typeof matches[1] !== 'undefined') {
-            video = matches[1];
-        }
-
-        if (video) {
-            video = {
-                type: "v",
-                uuid: Utils.uuid(),
-                code: video
-            };
-            this.videos.push(video);
-            Utils.logger().info("Added vimeo video to list. Code: " + video.code);
-            return video;
+                self.changeCurrentVideo(video);
+                self.videos.set(code, video);
+            });
         }
     },
 
-    addYouPorn: function(url) {
-        var video = false;
+    changeCurrentVideo: function(video) {
+        this.currentVideo = {
+            video: video,
+            elapsed: 0,
+        };
 
-        var regex = /([\d]+)/;
-        var matches = url.match(regex);
+        this.update(video);
+    },
 
-        if (typeof matches[1] !== 'undefined') {
-            video = matches[1];
+    getCurrentVideo: function() {
+        return this.currentVideo;
+    },
+
+    loop: function() {
+        var self = this;
+
+        if (typeof this.currentVideo === 'object') {
+            this.currentVideo.elapsed++;
+
+            if (this.currentVideo.elapsed > this.currentVideo.video.duration) {
+                this.changeCurrentVideo(this.random());
+            }
         }
 
-        if (video) {
-            video = {
-                type: "yp",
-                uuid: Utils.uuid(),
-                code: video
-            };
-            this.videos.push(video);
-            Utils.logger().info("Added youporn video to list. Code: " + video.code);
-            return video;
-        }
+        setTimeout(function() {
+            self.loop()
+        }, 1000);
     }
 };
 
-module.exports = new Videos();
+module.exports = Videos;
