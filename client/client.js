@@ -37,13 +37,13 @@ $(document).ready(function() {
 
             switch (message.type) {
                 case 'switch':
-                    play(message.code, false);
+                    play(message.code, false, 0);
                     break;
                 case 'video':
                     $('#grid').prepend(Elements.videoEntry(message.video));
                     videos[message.video.code] = message.video;
 
-                    play(message.video.code, false);
+                    play(message.video.code, false, 0);
 
                     break;
                 case 'videos':

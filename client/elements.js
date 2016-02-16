@@ -1,7 +1,7 @@
 "use strict";
 
 exports.videoEntry = function(video) {
-    return '<div class="grid-item yt" style="background-image: url(\'' + video.thumb + '\')" onclick="play(\'' + video.code + '\', true)"></div>';
+    return '<div class="grid-item yt" style="background-image: url(\'' + video.thumb + '\')" onclick="play(\'' + video.code + '\', true, 0)"></div>';
 };
 
 exports.newVideo = function(uuid) {

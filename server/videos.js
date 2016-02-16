@@ -109,7 +109,8 @@ Videos.prototype = {
         if (typeof this.currentVideo === 'object') {
             this.currentVideo.elapsed++;
 
-            if (this.currentVideo.elapsed > this.currentVideo.video.duration) {
+            //+3 for slow internet connections
+            if (this.currentVideo.elapsed > (this.currentVideo.video.duration + 3)) {
                 this.changeCurrentVideo(this.random());
             }
         }
