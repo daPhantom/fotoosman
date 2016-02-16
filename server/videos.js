@@ -29,7 +29,7 @@ Videos.prototype = {
         } else if(url.indexOf('vimeo') !== -1) {
             return this.addVimeo(url);
         } else if(url.indexOf('youpo') !== -1) {
-            return this.addYouPorn(url);
+            // return this.addYouPorn(url);
         }
     },
 
