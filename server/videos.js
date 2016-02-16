@@ -6,17 +6,10 @@ var Utils = require('./utils.js');
 //Constructor
 function Videos() {
     this.videos = [];
-    this.dummy();
 }
 
 //Functions
 Videos.prototype = {
-    dummy: function() {
-        this.videos.push({type: 'yt', uuid: Utils.uuid(), 'code': 'fDsyH9AVilQ'});
-        this.videos.push({type: 'yt', uuid: Utils.uuid(), 'code': 'Ffppy1-yYh0'});
-        this.videos.push({type: 'yt', uuid: Utils.uuid(), 'code': 'refCJcJJZso'});
-    },
-
     get: function(index) {
         var video = this.videos[index];
         return video;
