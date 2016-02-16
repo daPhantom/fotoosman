@@ -44,7 +44,7 @@ function PhntmLogger() {
 }
 
 exports.logger = function() {
-    if(typeof logger === 'undefined') {
+    if (typeof logger === 'undefined') {
         logger = new PhntmLogger();
     }
 
@@ -78,8 +78,8 @@ exports.uuid = function() {
 /**
  * overwrite native console.log with new phntmLogger
  */
-(function(){
-    if(console.log){
+(function() {
+    if (console.log) {
         console.log = function() {
             for (var i = 0; i < arguments.length; i++) {
                 exports.logger().info(arguments[i]);

@@ -4,7 +4,7 @@ var Utils = require('./utils'),
     argv = require('minimist')(process.argv.slice(2)),
     URL = require('url');
 
-if(typeof argv.logLevel !== 'undefined') {
+if (typeof argv.logLevel !== 'undefined') {
     //set log level to the one which was set via args
     Utils.logger().setLevel(argv.logLevel);
 } else {
@@ -55,12 +55,14 @@ Server.prototype = {
 
         server.httpServers.forEach(function(httpServer) {
             var clientServer = SockJS.createServer();
-            clientServer.installHandlers(httpServer, {prefix: '/client'});
+            clientServer.installHandlers(httpServer, {
+                prefix: '/client'
+            });
 
             clientServer.on('connection', function(connection) {
                 server.engine.addConnection(connection);
 
-                connection.on('close', function () {
+                connection.on('close', function() {
                     server.engine.removeConnection(connection);
                 });
 
@@ -68,7 +70,7 @@ Server.prototype = {
                     try {
                         message = JSON.parse(message);
                         server.engine.handleIncomingClientMessage(connection, message);
-                    } catch(e) {
+                    } catch (e) {
                         Utils.logger().error(e.message);
                         Utils.logger().error("Error trying to parse incoming message: " + message);
                     }
@@ -80,7 +82,10 @@ Server.prototype = {
     },
 
     _bindStatsListeners: function(request, response) {
-        response.writeHead(200, {'Content-type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
+        response.writeHead(200, {
+            'Content-type': 'text/plain',
+            'Access-Control-Allow-Origin': '*'
+        });
 
         try {
             var uri = URL.parse(request.url).pathname;
@@ -100,7 +105,7 @@ Server.prototype = {
     _bootImage: function() {
         var fs = require('fs');
 
-        require.extensions['.txt'] = function (module, filename) {
+        require.extensions['.txt'] = function(module, filename) {
             module.exports = fs.readFileSync(filename, 'utf8');
         };
 

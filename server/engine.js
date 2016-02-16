@@ -3,6 +3,7 @@
 //Load dependencies
 var Utils = require('./utils.js'),
     Videos = require('./videos.js');
+    // YouTube = require('./provider/youtube.js');
 
 //Constructor
 function Engine() {
@@ -14,15 +15,21 @@ Engine.prototype = {
     handleIncomingClientMessage: function(conn, msg) {
         switch (msg.type) {
             case 'add':
-                    var video = Videos.add(msg.url);
-                    if(typeof video === 'object') {
-                        var msg = {type: "video", video: video};
-                        return this.broadcast(msg);
-                    }
+                var video = Videos.add(msg.url);
+                if (typeof video === 'object') {
+                    var msg = {
+                        type: "video",
+                        video: video
+                    };
+                    return this.broadcast(msg);
+                }
                 break;
 
             case 'switch':
-                var msg = {type: "switch", uuid: msg.uuid};
+                var msg = {
+                    type: "switch",
+                    uuid: msg.uuid
+                };
                 return this.broadcast(msg);
                 break;
 
@@ -33,16 +40,19 @@ Engine.prototype = {
     },
 
     addConnection: function(conn) {
-      this.clients.set(conn.id, conn);
-      Utils.logger().info("adding new client to list with connection " + conn.id);
-      var msg = {type: "videos", videos: Videos.all()};
-      this.sendToClient(conn, msg);
+        this.clients.set(conn.id, conn);
+        Utils.logger().info("adding new client to list with connection " + conn.id);
+        var msg = {
+            type: "videos",
+            videos: Videos.all()
+        };
+        this.sendToClient(conn, msg);
     },
 
     broadcast: function(message) {
-        for(var connId of this.clients.keys()) {
+        for (var connId of this.clients.keys()) {
             var conn = this.clients.get(connId);
-            if(!this.sendToClient(conn, message)) {
+            if (!this.sendToClient(conn, message)) {
                 this.removeConnection(conn);
                 //break;
             }
@@ -50,11 +60,11 @@ Engine.prototype = {
     },
 
     sendToClient: function(conn, message) {
-        if(conn.writable) {
-            if(typeof message !== 'string') {
+        if (conn.writable) {
+            if (typeof message !== 'string') {
                 try {
                     message = JSON.stringify(message);
-                } catch(e) {
+                } catch (e) {
                     Utils.logger().error("error stringifying message: " + e.message);
                     return false;
                 }
@@ -68,7 +78,7 @@ Engine.prototype = {
         return false;
     },
 
-    removeConnection: function (conn) {
+    removeConnection: function(conn) {
         if (this.clients.has(conn.id)) {
             var id = conn.id;
 
