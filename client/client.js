@@ -1,7 +1,10 @@
 var SockJS = require('sockjs-client'),
     $ = jQuery = require('jquery'),
     Elements = require('./elements'),
-    Masonry = require('masonry-layout');
+    Masonry = require('masonry-layout'),
+    Moment = require('moment');
+
+require('moment-duration-format');
 
 require('bootstrap');
 
@@ -108,7 +111,8 @@ $(document).ready(function() {
             }
 
             $('#video').attr('src', url);
-            $('#title').text(video.title);
+            console.log(Moment.duration(video.duration));
+            $('#title').text(video.title + ' - Runtime: ' + Moment.duration(video.duration * 1000).format('hh:mm:ss'));
         }
     }
 
