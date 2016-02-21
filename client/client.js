@@ -112,7 +112,7 @@ $(document).ready(function() {
 
             $('#video').attr('src', url);
             console.log(Moment.duration(video.duration));
-            $('#title').text(video.title + ' - Runtime: ' + Moment.duration(video.duration * 1000).format('hh:mm:ss'));
+            $('#title').text(video.title + ' - ' + Moment.duration(video.duration * 1000).format('hh:mm:ss'));
         }
     }
 
