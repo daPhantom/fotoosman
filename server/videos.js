@@ -51,7 +51,8 @@ Videos.prototype = {
         if(this.videos.has(video.code)) {
             var msg = {
                 type: "switch",
-                code: video.code
+                code: video.code,
+                elapsed: video.elapsed
             };
         } else {
             var msg = {
@@ -81,7 +82,8 @@ Videos.prototype = {
                     code: data.id,
                     title: data.snippet.title,
                     duration: Moment.duration(data.contentDetails.duration).asSeconds(),
-                    thumb: data.snippet.thumbnails.medium.url
+                    thumb: data.snippet.thumbnails.medium.url,
+                    elapsed: 0
                 };
 
                 self.changeCurrentVideo(video);
@@ -91,11 +93,7 @@ Videos.prototype = {
     },
 
     changeCurrentVideo: function(video) {
-        this.currentVideo = {
-            video: video,
-            elapsed: 0,
-        };
-
+        this.currentVideo = video.code;
         this.update(video);
     },
 
@@ -106,11 +104,12 @@ Videos.prototype = {
     loop: function() {
         var self = this;
 
-        if (typeof this.currentVideo === 'object') {
-            this.currentVideo.elapsed++;
+        if (this.currentVideo) {
+            this.videos.get(this.currentVideo).elapsed++;
 
             //+3 for slow internet connections
-            if (this.currentVideo.elapsed > (this.currentVideo.video.duration + 3)) {
+            if (this.videos.get(this.currentVideo).elapsed > (this.videos.get(this.currentVideo).duration + 3)) {
+                this.videos.get(this.currentVideo).elapsed = 0;
                 this.changeCurrentVideo(this.random());
             }
         }

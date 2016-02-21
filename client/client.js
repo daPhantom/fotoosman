@@ -35,23 +35,25 @@ $(document).ready(function() {
         sock.onmessage = function(e) {
             var message = JSON.parse(e.data);
 
+            console.log(message);
+
             switch (message.type) {
                 case 'switch':
-                    play(message.code, false, 0);
+                    play(message.code, false, message.elapsed);
                     break;
                 case 'video':
                     $('#grid').prepend(Elements.videoEntry(message.video));
                     videos[message.video.code] = message.video;
 
-                    play(message.video.code, false, 0);
+                    play(message.video.code, false, message.video.elapsed);
                     break;
                 case 'videos':
                     message.videos.forEach(function(video) {
                         $('#grid').prepend(Elements.videoEntry(video));
                         videos[video.code] = video;
                     });
-
-                    play(message.currentVideo.video.code, false, message.currentVideo.elapsed);
+                    console.log(videos[message.currentVideo]);
+                    play(videos[message.currentVideo].code, false, videos[message.currentVideo].elapsed);
                     break;
             }
         };

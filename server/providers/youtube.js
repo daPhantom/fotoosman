@@ -13,9 +13,10 @@ function YouTube() {
 //Functions
 YouTube.prototype = {
     authenticate: function() {
+        var config = require('../credentials/youtube.json');
         YouTubeAPI.authenticate({
             type: 'key',
-            key: 'AIzaSyAcmk59LQ3FL2I61jlth_lmRbJRq_r4kFU'
+            key: config.key
         });
     },
 
@@ -25,6 +26,7 @@ YouTube.prototype = {
             id: code
         }, function(err, data) {
             if (err) {
+                Utils.logger().error(err);
                 return false;
             }
 
