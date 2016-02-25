@@ -78,10 +78,6 @@ Videos.prototype = {
 
         if (code) {
             YouTube.parse(code, function(data) {
-                if(!data) {
-                    return false;
-                }
-                
                 var video = {
                     code: data.id,
                     title: data.snippet.title,

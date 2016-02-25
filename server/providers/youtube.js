@@ -30,7 +30,9 @@ YouTube.prototype = {
                 return false;
             }
 
-            callback(data.items[0]);
+            if(data.items.length > 0) {
+                callback(data.items[0]);
+            }
         });
     }
 };
