@@ -54,6 +54,18 @@ Client.prototype = {
         };
     },
 
+    send: function(message) {
+        if (typeof message !== 'string') {
+            try {
+                message = JSON.stringify(message);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+
+        this.socket.send(message);
+    },
+
     addEventListener: function(event, key, callback) {
         switch (event) {
             case 'onOpen':
