@@ -1,123 +1,98 @@
-var SockJS = require('./sockjs'),
-    $ = jQuery = require('jquery'),
-    Elements = require('./elements'),
-    Masonry = require('masonry-layout'),
-    Moment = require('moment');
+'use strict';
 
-require('moment-duration-format');
+var SockJS = require('sockjs-client'),
+    Config = require('./config');
 
-require('bootstrap');
+function Client() {
+    this.socket = null;
+    this.socketInterval = null;
 
-$(document).ready(function() {
-    var videos = {};
+    this.onOpen = {};
+    this.onMessage = {};
+    this.onClose = {};
+}
 
-    var videoFrame = $('#video');
+Client.prototype = {
+    connect: function() {
+        var self = this;
 
-    var lastInput = '';
+        var host = Config.get('host'),
+            port = Config.get('port'),
+            prefix = Config.get('prefix');
 
-    SockJS.addEventListener('onOpen', 'client', function() {
-        $('#grid').html('');
-        hideLoader();
-    });
+        self.socket = new SockJS(host + ':' + port + prefix);
+        clearInterval(self.socketInterval);
 
-    SockJS.addEventListener('onClose', 'client', function() {
-        showLoader();
-    });
+        self.socket.onopen = function() {
+            for (var key in self.onOpen) {
+                self.onOpen[key]();
+            }
+        };
 
-    SockJS.addEventListener('onMessage', 'client', function(message) {
-        switch (message.type) {
-            case 'switch':
-                play(message.code, false, message.elapsed);
-                break;
-            case 'video':
-                $('#grid').prepend(Elements.videoEntry(message.video));
-                videos[message.video.code] = message.video;
+        self.socket.onclose = function() {
+            for (var key in self.onClose) {
+                self.onClose[key]();
+            }
 
-                play(message.video.code, false, message.video.elapsed);
-                break;
-            case 'videos':
-                message.videos.forEach(function(video) {
-                    $('#grid').prepend(Elements.videoEntry(video));
-                    videos[video.code] = video;
-                });
-                play(videos[message.currentVideo].code, false, videos[message.currentVideo].elapsed);
-                break;
-        }
-    });
+            self.socket = null;
+            self.socketInterval = setInterval(function() {
+                self.connect();
+            }, 2000);
+        };
 
-    SockJS.connect();
-
-    var msnry = new Masonry('#grid', {
-        itemSelector: '.grid-item',
-        columnWidth: 196
-    });
-
-    function sendMessage(message) {
-        if (typeof message !== 'string') {
+        self.socket.onmessage = function(e) {
             try {
-                message = JSON.stringify(message);
-            } catch (e) {
-                return false;
-            }
-        }
-
-        return sock.send(message);
-    }
-
-    function sendVideoToServer(url) {
-        var message = {
-            type: "add",
-            url: url
-        };
-        return sendMessage(message);
-    }
-
-    function sendSwitchToServer(code) {
-        var message = {
-            type: "switch",
-            code: code
-        };
-        return sendMessage(message);
-    }
-
-    function play(code, clicked, elapsed) {
-        var video = videos[code];
-        var url = false;
-
-        if (typeof video === 'object') {
-            url = 'https://www.youtube.com/embed/' + video.code + '?start=' + elapsed + '&rel=0&autoplay=1&controls=0&iv_load_policy=3';
-        }
-
-        if (url) {
-            if (clicked) {
-                sendSwitchToServer(code);
+                var message = JSON.parse(e.data);
+            } catch (error) {
+                console.log(error.message);
+                return;
             }
 
-            $('#video').attr('src', url);
-            $('#title').text(video.title + ' - ' + Moment.duration(video.duration * 1000).format('hh:mm:ss'));
+            for (var key in self.onMessage) {
+                self.onMessage[key](message);
+            }
+        };
+    },
+
+    addEventListener: function(event, key, callback) {
+        switch (event) {
+            case 'onOpen':
+            case 'onopen':
+                this.onOpen[key] = callback;
+                break;
+            case 'onClose':
+            case 'onclose':
+                this.onClose[key] = callback;
+                break;
+            case 'onMessage':
+            case 'onmessage':
+                this.onMessage[key] = callback;
+                break;
+            default:
+                console.log('Trying to register a callback on a non existing event');
+                break;
+        }
+    },
+
+    removeEventListener: function(event, key) {
+        switch (event) {
+            case 'onOpen':
+            case 'onopen':
+                delete this.onOpen[key];
+                break;
+            case 'onClose':
+            case 'onclose':
+                delete this.onClose[key];
+                break;
+            case 'onMessage':
+            case 'onmessage':
+                delete this.onMessage[key];
+                break;
+            default:
+                console.log('Trying to remove a callback on a non existing event');
+                break;
         }
     }
+};
 
-    function showLoader() {
-        $('#loader').modal();
-    }
-
-    function hideLoader() {
-        $('#loader').modal('hide');
-    }
-
-    $('#input').bind("input propertychange", function(e) {
-        var value = $('#input').val();
-        if (value !== lastInput) {
-            lastInput = value;
-            sendVideoToServer(value);
-        }
-        $('#input').val('');
-    })
-
-    global.showLoader = showLoader;
-    global.hideLoader = hideLoader;
-    global.play = play;
-    global.videos = videos;
-    global.$ = $;
-});
+module.exports = new Client();
