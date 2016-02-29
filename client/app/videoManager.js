@@ -8,7 +8,7 @@ function VideoManager() {
     this.videos = {};
     this.lastInput = '';
 
-    self = this;
+    var self = this;
 
     Client.addEventListener('onOpen', 'videoManager', function() {
         $('#grid').html('');
@@ -51,7 +51,7 @@ VideoManager.prototype = {
     play: function(code, clicked, elapsed) {
         var self = this;
 
-        var video = self.videos[code];
+        var video = this.videos[code];
         var url = false;
 
         if (typeof video === 'object') {
@@ -87,9 +87,4 @@ VideoManager.prototype = {
     }
 };
 
-var videoManager = new VideoManager();
-
-global.play = videoManager.play();
-global.videos = videoManager.videos;
-
-module.exports = videoManager;
+module.exports = global.videoManager = new VideoManager();
