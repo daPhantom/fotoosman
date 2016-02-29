@@ -1,4 +1,4 @@
-var SockJS = require('sockjs-client'),
+var SockJS = require('./sockjs'),
     $ = jQuery = require('jquery'),
     Elements = require('./elements'),
     Masonry = require('masonry-layout'),
@@ -11,58 +11,41 @@ require('bootstrap');
 $(document).ready(function() {
     var videos = {};
 
-    var sock = null;
-    var sockInterval = null;
-
     var videoFrame = $('#video');
 
     var lastInput = '';
 
-    var new_sock = function() {
-        sock = new SockJS('http://localhost:7005/client');
-        clearInterval(sockInterval);
+    SockJS.addEventListener('onOpen', 'client', function() {
+        $('#grid').html('');
+        hideLoader();
+    });
 
-        sock.onopen = function() {
-            $('#grid').html('');
-            hideLoader();
-        };
+    SockJS.addEventListener('onClose', 'client', function() {
+        showLoader();
+    });
 
-        sock.onclose = function() {
-            showLoader();
-            sock = null;
-            sockInterval = setInterval(function() {
-                new_sock();
-            }, 2000);
-        };
+    SockJS.addEventListener('onMessage', 'client', function(message) {
+        switch (message.type) {
+            case 'switch':
+                play(message.code, false, message.elapsed);
+                break;
+            case 'video':
+                $('#grid').prepend(Elements.videoEntry(message.video));
+                videos[message.video.code] = message.video;
 
-        sock.onmessage = function(e) {
-            var message = JSON.parse(e.data);
+                play(message.video.code, false, message.video.elapsed);
+                break;
+            case 'videos':
+                message.videos.forEach(function(video) {
+                    $('#grid').prepend(Elements.videoEntry(video));
+                    videos[video.code] = video;
+                });
+                play(videos[message.currentVideo].code, false, videos[message.currentVideo].elapsed);
+                break;
+        }
+    });
 
-            console.log(message);
-
-            switch (message.type) {
-                case 'switch':
-                    play(message.code, false, message.elapsed);
-                    break;
-                case 'video':
-                    $('#grid').prepend(Elements.videoEntry(message.video));
-                    videos[message.video.code] = message.video;
-
-                    play(message.video.code, false, message.video.elapsed);
-                    break;
-                case 'videos':
-                    message.videos.forEach(function(video) {
-                        $('#grid').prepend(Elements.videoEntry(video));
-                        videos[video.code] = video;
-                    });
-                    console.log(videos[message.currentVideo]);
-                    play(videos[message.currentVideo].code, false, videos[message.currentVideo].elapsed);
-                    break;
-            }
-        };
-    };
-
-    new_sock();
+    SockJS.connect();
 
     var msnry = new Masonry('#grid', {
         itemSelector: '.grid-item',
@@ -111,7 +94,6 @@ $(document).ready(function() {
             }
 
             $('#video').attr('src', url);
-            console.log(Moment.duration(video.duration));
             $('#title').text(video.title + ' - ' + Moment.duration(video.duration * 1000).format('hh:mm:ss'));
         }
     }

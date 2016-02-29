@@ -25,7 +25,7 @@
   "homepage": "https://github.com/daPhantom/fotoosman#readme",
   "scripts": {
     "install": "node installer.js",
-    "build": "browserify client.js -o public/js/bundle.js --full-path=false",
-    "watch": "watchify client.js -o public/js/bundle.js --debug --verbose --full-path=false"
+    "build": "browserify app/client.js -o public/js/bundle.js --full-path=false",
+    "watch": "watchify app/client.js -o public/js/bundle.js --debug --verbose --full-path=false"
   }
 }
