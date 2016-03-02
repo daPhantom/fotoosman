@@ -13,10 +13,6 @@ require('moment-duration-format');
 require('bootstrap');
 
 $(document).ready(function() {
-    var videoFrame = $('#video');
-
-    var lastInput = '';
-
     Client.addEventListener('onOpen', 'app', function() {
         hideLoader();
     });
