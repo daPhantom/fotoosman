@@ -13,16 +13,19 @@ if (typeof argv.logLevel !== 'undefined') {
     Utils.logger().setLevel(4);
 }
 
-Server.addSocketEventListener('onOpen', 'app', function(connection) {
-    Engine.addConnection(connection);
-});
+function setupSocketEventListeners() {
+    Server.addSocketEventListener('onOpen', 'app', function(connection) {
+        Engine.addConnection(connection);
+    });
 
-Server.addSocketEventListener('onClose', 'app', function(connection) {
-    Engine.removeConnection(connection);
-});
+    Server.addSocketEventListener('onClose', 'app', function(connection) {
+        Engine.removeConnection(connection);
+    });
 
-Server.addSocketEventListener('onMessage', 'app', function(connection, message) {
-    Engine.handleIncomingClientMessage(connection, message)
-});
+    Server.addSocketEventListener('onMessage', 'app', function(connection, message) {
+        Engine.handleIncomingClientMessage(connection, message)
+    });
+}
 
+setupSocketEventListeners();
 Server.start();
