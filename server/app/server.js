@@ -66,7 +66,6 @@ Server.prototype = {
 
             socketServer.on('connection', function(connection) {
                 for (var key in server.onOpen) {
-                    Utils.logger().trace(server.onOpen[key]);
                     server.onOpen[key](connection);
                 }
 
