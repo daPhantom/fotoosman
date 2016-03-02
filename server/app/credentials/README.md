@@ -14,6 +14,6 @@ Get credentials: https://console.developers.google.com/apis/credentials
 
 ```
 {
-    key: "yourOAuthAPIServerKeyGoesHere"
+    "key": "yourOAuthAPIServerKeyGoesHere"
 }
 ```
