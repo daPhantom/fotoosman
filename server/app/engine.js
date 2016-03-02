@@ -1,26 +1,27 @@
 "use strict";
 
 //Load dependencies
-var Utils = require('./utils.js'),
-    Videos = require('./videos.js');
-    // YouTube = require('./provider/youtube.js');
+var Utils = require('./utils'),
+    Videos = require('./videos');
 
 //Constructor
 function Engine() {
     this.clients = new Map();
-    this.videos = new Videos(this);
+    this.videos = new Videos(this)
 }
 
 //Functions
 Engine.prototype = {
     handleIncomingClientMessage: function(conn, msg) {
+        var self = this;
+
         switch (msg.type) {
             case 'add':
-                this.videos.add(msg.url);
+                self.videos.add(msg.url);
                 break;
 
             case 'switch':
-                this.videos.switch(msg.code);
+                self.videos.switch(msg.code);
                 break;
 
             default:
@@ -30,14 +31,16 @@ Engine.prototype = {
     },
 
     addConnection: function(conn) {
-        this.clients.set(conn.id, conn);
+        var self = this;
+
+        self.clients.set(conn.id, conn);
         Utils.logger().info("adding new client to list with connection " + conn.id);
         var msg = {
             type: "videos",
-            videos: this.videos.all(),
-            currentVideo: this.videos.getCurrentVideo()
+            videos: self.videos.all(),
+            currentVideo: self.videos.getCurrentVideo()
         };
-        this.sendToClient(conn, msg);
+        self.sendToClient(conn, msg);
     },
 
     broadcast: function(message) {
@@ -84,4 +87,4 @@ Engine.prototype = {
     },
 };
 
-module.exports = Engine;
+module.exports = new Engine();

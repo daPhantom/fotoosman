@@ -17,11 +17,11 @@ $(document).ready(function() {
 
     var lastInput = '';
 
-    Client.addEventListener('onOpen', 'client', function() {
+    Client.addEventListener('onOpen', 'app', function() {
         hideLoader();
     });
 
-    Client.addEventListener('onClose', 'client', function() {
+    Client.addEventListener('onClose', 'app', function() {
         showLoader();
     });
 

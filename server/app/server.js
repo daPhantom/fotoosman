@@ -1,87 +1,43 @@
 "use strict";
 
-var Utils = require('./utils'),
-    argv = require('minimist')(process.argv.slice(2)),
-    URL = require('url');
-
-if (typeof argv.logLevel !== 'undefined') {
-    //set log level to the one which was set via args
-    Utils.logger().setLevel(argv.logLevel);
-} else {
-    //set production log level to 4
-    Utils.logger().setLevel(4);
-}
+var Config = require('./config'),
+    Utils = require('./utils'),
+    HTTP = require('http'),
+    URL = require('url'),
+    SockJS = require('sockjs');
 
 function Server() {
-    //dependencies
-    var Engine = require('./engine');
-
-    //load engine
-    this.engine = new Engine();
-
-    //all client servers
-    this.clientServers = [];
-
-    //all HTTP(s) servers
     this.httpServers = [];
+    this.socketServers = [];
+
+    //Events
+    this.onOpen = {};
+    this.onMessage = {};
+    this.onClose = {};
 }
 
 Server.prototype = {
     start: function() {
-        this._initHTTPServers();
-        this._attachClientServers();
-        this._bootImage();
+        this.initHTTPServers();
+        this.attachSocketServers();
+
+        Utils.logger().info('Server successfully initialized.')
     },
 
-    _initHTTPServers: function() {
+    initHTTPServers: function() {
         var server = this;
 
-        var ports = [7005],
-            HTTP = require('http');
-
-        ports.forEach(function(port) {
-            var httpServer = HTTP.createServer(server._bindStatsListeners);
+        Config.get('ports').forEach(function(port) {
+            var httpServer = HTTP.createServer(server.bindHttpListeners);
 
             httpServer.listen(port, '0.0.0.0');
             server.httpServers.push(httpServer);
 
-            Utils.logger().info('HTTP & Stats server running on ' + port + '. SSL is ' + (argv.ssl ? 'enabled' : 'disabled') + '.');
+            Utils.logger().info('HTTP server running on ' + port + '.');
         });
     },
 
-    _attachClientServers: function() {
-        var server = this,
-            SockJS = require('sockjs');
-
-        server.httpServers.forEach(function(httpServer) {
-            var clientServer = SockJS.createServer();
-            clientServer.installHandlers(httpServer, {
-                prefix: '/client'
-            });
-
-            clientServer.on('connection', function(connection) {
-                server.engine.addConnection(connection);
-
-                connection.on('close', function() {
-                    server.engine.removeConnection(connection);
-                });
-
-                connection.on('data', function(message) {
-                    try {
-                        message = JSON.parse(message);
-                        server.engine.handleIncomingClientMessage(connection, message);
-                    } catch (e) {
-                        Utils.logger().error(e.message);
-                        Utils.logger().error("Error trying to parse incoming message: " + message);
-                    }
-                });
-            });
-
-            server.clientServers.push(clientServer);
-        });
-    },
-
-    _bindStatsListeners: function(request, response) {
+    bindHttpListeners: function(request, response) {
         response.writeHead(200, {
             'Content-type': 'text/plain',
             'Access-Control-Allow-Origin': '*'
@@ -93,27 +49,90 @@ Server.prototype = {
             response.write('ERROR!');
         }
 
-        if (uri == '/stats' || uri == '/stats/') {
-            Stats.outputToResponse(response, server);
-        } else {
-            response.write("I am a wizard!");
-        }
+        //TODO use me later
+        response.write("¯\\_(ツ)_/¯");
 
         response.end();
     },
 
-    _bootImage: function() {
-        var fs = require('fs');
+    attachSocketServers: function() {
+        var server = this;
 
-        require.extensions['.txt'] = function(module, filename) {
-            module.exports = fs.readFileSync(filename, 'utf8');
-        };
+        server.httpServers.forEach(function(httpServer) {
+            var socketServer = SockJS.createServer();
+            socketServer.installHandlers(httpServer, {
+                prefix: '/client'
+            });
 
-        var image = require("./boot.txt");
+            socketServer.on('connection', function(connection) {
+                for (var key in server.onOpen) {
+                    Utils.logger().trace(server.onOpen[key]);
+                    server.onOpen[key](connection);
+                }
 
-        console.log(image);
+                connection.on('close', function() {
+                    for (var key in server.onClose) {
+                        server.onClose[key](connection);
+                    }
+                });
+
+                connection.on('data', function(message) {
+                    try {
+                        var message = JSON.parse(message);
+                    } catch (error) {
+                        Utils.logger().error(error.message);
+                        return;
+                    }
+
+                    for (var key in server.onMessage) {
+                        server.onMessage[key](connection, message);
+                    }
+                });
+            });
+
+            server.socketServers.push(socketServer);
+        });
+    },
+
+    addSocketEventListener: function(event, key, callback) {
+        switch (event) {
+            case 'onOpen':
+            case 'onopen':
+                this.onOpen[key] = callback;
+                break;
+            case 'onClose':
+            case 'onclose':
+                this.onClose[key] = callback;
+                break;
+            case 'onMessage':
+            case 'onmessage':
+                this.onMessage[key] = callback;
+                break;
+            default:
+                console.log('Trying to register a callback on a non existing event');
+                break;
+        }
+    },
+
+    removeSocketEventListener: function(event, key) {
+        switch (event) {
+            case 'onOpen':
+            case 'onopen':
+                delete this.onOpen[key];
+                break;
+            case 'onClose':
+            case 'onclose':
+                delete this.onClose[key];
+                break;
+            case 'onMessage':
+            case 'onmessage':
+                delete this.onMessage[key];
+                break;
+            default:
+                console.log('Trying to remove a callback on a non existing event');
+                break;
+        }
     }
 };
 
-var server = new Server();
-server.start();
+module.exports = new Server();

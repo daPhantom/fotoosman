@@ -7,6 +7,7 @@ function Client() {
     this.socket = null;
     this.socketInterval = null;
 
+    //Events
     this.onOpen = {};
     this.onMessage = {};
     this.onClose = {};
