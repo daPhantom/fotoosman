@@ -30,7 +30,7 @@ YouTube.prototype = {
                 return false;
             }
 
-            if(data.items.length > 0) {
+            if (data.items.length > 0) {
                 callback(data.items[0]);
             }
         });

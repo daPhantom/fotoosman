@@ -40,7 +40,7 @@ Videos.prototype = {
     switch: function(code) {
         var video = this.videos.get(code);
 
-        if(typeof video !== 'object') {
+        if (typeof video !== 'object') {
             return false;
         }
 
@@ -48,7 +48,7 @@ Videos.prototype = {
     },
 
     update: function(video) {
-        if(this.videos.has(video.code)) {
+        if (this.videos.has(video.code)) {
             var msg = {
                 type: "switch",
                 code: video.code,
