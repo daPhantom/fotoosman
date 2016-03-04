@@ -9,7 +9,6 @@ var config = {
 
 function Config() {
     this.config = extend(true, globalConfig, config);
-
 }
 
 Config.prototype = {
