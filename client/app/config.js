@@ -3,7 +3,10 @@
 var config = {
     'host': 'http://localhost',
     'port': 7005,
-    'prefix': '/client'
+    'boards': [
+        'random',
+        'music',
+    ]
 };
 
 function Config() {

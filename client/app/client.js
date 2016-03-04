@@ -17,9 +17,24 @@ Client.prototype = {
     connect: function() {
         var self = this;
 
+        var regex = new RegExp('\/b\/([a-z0-9]*)');
+        var result = window.location.pathname.match(regex);
+
+        var board = 'random';
+
+        if(result && typeof result[1] === 'string') {
+            var urlBoard = result[1];
+
+            Config.get('boards').forEach(function(configBoard) {
+                if(urlBoard === configBoard) {
+                    board = configBoard;
+                }
+            });
+        }
+
         var host = Config.get('host'),
             port = Config.get('port'),
-            prefix = Config.get('prefix');
+            prefix = '/board-' + board;
 
         self.socket = new SockJS(host + ':' + port + prefix);
         clearInterval(self.socketInterval);

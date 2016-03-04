@@ -5,7 +5,7 @@ var Utils = require('./utils'),
     Videos = require('./videos');
 
 //Constructor
-function Engine() {
+function Engine(name) {
     this.clients = new Map();
     this.videos = new Videos(this)
 }
@@ -87,4 +87,4 @@ Engine.prototype = {
     },
 };
 
-module.exports = new Engine();
+module.exports = Engine;

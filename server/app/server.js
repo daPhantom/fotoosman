@@ -19,9 +19,6 @@ function Server() {
 Server.prototype = {
     start: function() {
         this.initHTTPServers();
-        this.attachSocketServers();
-
-        Utils.logger().info('Server successfully initialized.')
     },
 
     initHTTPServers: function() {
@@ -55,23 +52,27 @@ Server.prototype = {
         response.end();
     },
 
-    attachSocketServers: function() {
+    spawnSocketServer: function(name) {
         var server = this;
 
         server.httpServers.forEach(function(httpServer) {
             var socketServer = SockJS.createServer();
             socketServer.installHandlers(httpServer, {
-                prefix: '/client'
+                prefix: '/' + name
             });
 
+            server.onOpen[name] = {};
+            server.onClose[name] = {};
+            server.onMessage[name] = {};
+
             socketServer.on('connection', function(connection) {
-                for (var key in server.onOpen) {
-                    server.onOpen[key](connection);
+                for (var key in server.onOpen[name]) {
+                    server.onOpen[name][key](connection);
                 }
 
                 connection.on('close', function() {
-                    for (var key in server.onClose) {
-                        server.onClose[key](connection);
+                    for (var key in server.onClose[name]) {
+                        server.onClose[name][key](connection);
                     }
                 });
 
@@ -83,8 +84,8 @@ Server.prototype = {
                         return;
                     }
 
-                    for (var key in server.onMessage) {
-                        server.onMessage[key](connection, message);
+                    for (var key in server.onMessage[name]) {
+                        server.onMessage[name][key](connection, message);
                     }
                 });
             });
@@ -93,19 +94,22 @@ Server.prototype = {
         });
     },
 
-    addSocketEventListener: function(event, key, callback) {
+    on: function(event, name, key, callback) {
         switch (event) {
+            case 'open':
             case 'onOpen':
             case 'onopen':
-                this.onOpen[key] = callback;
+                this.onOpen[name][key] = callback;
                 break;
+            case 'close':
             case 'onClose':
             case 'onclose':
-                this.onClose[key] = callback;
+                this.onClose[name][key] = callback;
                 break;
+            case 'message':
             case 'onMessage':
             case 'onmessage':
-                this.onMessage[key] = callback;
+                this.onMessage[name][key] = callback;
                 break;
             default:
                 console.log('Trying to register a callback on a non existing event');
@@ -113,19 +117,22 @@ Server.prototype = {
         }
     },
 
-    removeSocketEventListener: function(event, key) {
+    off: function(event, name, key) {
         switch (event) {
+            case 'open':
             case 'onOpen':
             case 'onopen':
-                delete this.onOpen[key];
+                delete this.onOpen[name][key];
                 break;
+            case 'close':
             case 'onClose':
             case 'onclose':
-                delete this.onClose[key];
+                delete this.onClose[name][key];
                 break;
+            case 'message':
             case 'onMessage':
             case 'onmessage':
-                delete this.onMessage[key];
+                delete this.onMessage[name][key];
                 break;
             default:
                 console.log('Trying to remove a callback on a non existing event');
