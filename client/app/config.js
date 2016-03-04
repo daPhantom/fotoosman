@@ -1,16 +1,15 @@
 "use strict";
 
+var extend = require('extend'),
+    globalConfig = require('../../config/global.json');
+
 var config = {
-    'host': 'http://localhost',
-    'port': 7005,
-    'boards': [
-        'random',
-        'music',
-    ]
+
 };
 
 function Config() {
-    this.config = config;
+    this.config = extend(true, globalConfig, config);
+
 }
 
 Config.prototype = {

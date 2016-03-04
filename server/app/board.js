@@ -5,13 +5,13 @@ var Utils = require('./utils'),
     Videos = require('./videos');
 
 //Constructor
-function Engine(name) {
+function Board(name) {
     this.clients = new Map();
     this.videos = new Videos(this)
 }
 
 //Functions
-Engine.prototype = {
+Board.prototype = {
     handleIncomingClientMessage: function(conn, msg) {
         var self = this;
 
@@ -87,4 +87,4 @@ Engine.prototype = {
     },
 };
 
-module.exports = Engine;
+module.exports = Board;

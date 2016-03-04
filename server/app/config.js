@@ -1,11 +1,14 @@
 "use strict";
 
+var extend = require('extend'),
+    globalConfig = require('../../config/global.json');
+
 var config = {
-    'ports': [7005],
+
 };
 
 function Config() {
-    this.config = config;
+    this.config = extend(true, globalConfig, config);
 }
 
 Config.prototype = {

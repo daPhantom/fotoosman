@@ -1,8 +1,9 @@
 "use strict";
 
-var Utils = require('./utils'),
+var Config = require('./config'),
+    Utils = require('./utils'),
     argv = require('minimist')(process.argv.slice(2)),
-    Engine = require('./engine'),
+    Board = require('./board'),
     Server = require('./server');
 
 if (typeof argv.logLevel !== 'undefined') {
@@ -30,34 +31,23 @@ function setupClient() {
 }
 
 function setupBoards() {
-    var boardEngine = new Engine('board-random');
-    Server.spawnSocketServer('board-random');
+    Config.get('boards').forEach(function(name) {
+        name = 'board-' + name;
 
-    Server.on('open', 'board-random', 'app', function(connection) {
-        boardEngine.addConnection(connection);
-    });
+        var board = new Board(name);
+        Server.spawnSocketServer(name);
 
-    Server.on('close', 'board-random', 'app', function(connection) {
-        boardEngine.removeConnection(connection);
-    });
+        Server.on('open', 'board-random', 'app', function(connection) {
+            board.addConnection(connection);
+        });
 
-    Server.on('message', 'board-random', 'app', function(connection, message) {
-        boardEngine.handleIncomingClientMessage(connection, message)
-    });
+        Server.on('close', 'board-random', 'app', function(connection) {
+            board.removeConnection(connection);
+        });
 
-    var musicEngine = new Engine('board-music');
-    Server.spawnSocketServer('board-music');
-
-    Server.on('open', 'board-music', 'app', function(connection) {
-        musicEngine.addConnection(connection);
-    });
-
-    Server.on('close', 'board-music', 'app', function(connection) {
-        musicEngine.removeConnection(connection);
-    });
-
-    Server.on('message', 'board-music', 'app', function(connection, message) {
-        musicEngine.handleIncomingClientMessage(connection, message)
+        Server.on('message', 'board-random', 'app', function(connection, message) {
+            board.handleIncomingClientMessage(connection, message)
+        });
     });
 }
 

@@ -1,0 +1,10 @@
+{
+    "host": "http:\/\/localhost",
+    "ports": [7005],
+    "port": 7005,
+    "boards": [
+        "random",
+        "music",
+        "fun"
+    ]
+}

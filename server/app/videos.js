@@ -6,8 +6,8 @@ var Utils = require('./utils.js'),
     YouTube = require('./providers/youtube.js');
 
 //Constructor
-function Videos(engine) {
-    this.engine = engine;
+function Videos(board) {
+    this.board = board;
     this.currentVideo = false;
     this.videos = new Map();
 
@@ -61,7 +61,7 @@ Videos.prototype = {
             };
         }
 
-        return this.engine.broadcast(msg);
+        return this.board.broadcast(msg);
     },
 
     parseYouTube: function(url) {
