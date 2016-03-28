@@ -1,7 +1,7 @@
 "use strict";
 
-var Config = require('./config'),
-    Utils = require('./utils'),
+var Config = require('../../shared/config'),
+    Logger = require('./logger'),
     HTTP = require('http'),
     URL = require('url'),
     SockJS = require('sockjs');
@@ -30,7 +30,7 @@ Server.prototype = {
             httpServer.listen(port, '0.0.0.0');
             server.httpServers.push(httpServer);
 
-            Utils.logger().info('HTTP server running on ' + port + '.');
+            Logger.info('HTTP server running on ' + port + '.');
         });
     },
 
@@ -80,7 +80,7 @@ Server.prototype = {
                     try {
                         var message = JSON.parse(message);
                     } catch (error) {
-                        Utils.logger().error(error.message);
+                        Logger.error(error.message);
                         return;
                     }
 

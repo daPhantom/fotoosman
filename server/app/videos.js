@@ -1,7 +1,7 @@
 "use strict";
 
 //Load dependencies
-var Utils = require('./utils.js'),
+var Utils = require('../../shared/utils.js'),
     Moment = require('moment'),
     YouTube = require('./providers/youtube.js');
 

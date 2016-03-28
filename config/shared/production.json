@@ -1,10 +1,11 @@
 {
-    "host": "http:\/\/localhost",
+    "host": "http:\/\/fotoosman.de",
     "ports": [7005],
     "port": 7005,
     "boards": [
         "random",
         "music",
         "fun"
-    ]
+    ],
+    "loglevel": 4
 }

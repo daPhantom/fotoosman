@@ -1,7 +1,7 @@
 "use strict";
 
 //Load dependencies
-var Utils = require('./utils'),
+var Logger = require('./logger'),
     Videos = require('./videos');
 
 //Constructor
@@ -25,7 +25,7 @@ Board.prototype = {
                 break;
 
             default:
-                Utils.logger().warn('received unknown incoming subscribe message from type ' + msg.type);
+                Logger.warn('received unknown incoming subscribe message from type ' + msg.type);
                 break;
         }
     },
@@ -34,7 +34,7 @@ Board.prototype = {
         var self = this;
 
         self.clients.set(conn.id, conn);
-        Utils.logger().info("adding new client to list with connection " + conn.id);
+        Logger.info("adding new client to list with connection " + conn.id);
         var msg = {
             type: "videos",
             videos: self.videos.all(),
@@ -59,12 +59,12 @@ Board.prototype = {
                 try {
                     message = JSON.stringify(message);
                 } catch (e) {
-                    Utils.logger().error("error stringifying message: " + e.message);
+                    Logger.error("error stringifying message: " + e.message);
                     return false;
                 }
             }
 
-            Utils.logger().info("sending message to connection " + conn.id + " with data: " + message);
+            Logger.info("sending message to connection " + conn.id + " with data: " + message);
 
             return conn.write(message);
         }
@@ -82,7 +82,7 @@ Board.prototype = {
 
             this.clients.delete(id);
 
-            Utils.logger().info('removed dead connection ' + id);
+            Logger.info('removed dead connection ' + id);
         }
     },
 };

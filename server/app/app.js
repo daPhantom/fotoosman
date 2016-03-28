@@ -1,18 +1,12 @@
 "use strict";
 
-var Config = require('./config'),
-    Utils = require('./utils'),
-    argv = require('minimist')(process.argv.slice(2)),
+process.env.role = 'server';
+
+var Utils = require('../../shared/utils'),
+    Logger = require('./logger'),
+    Config = require('../../shared/config'),
     Board = require('./board'),
     Server = require('./server');
-
-if (typeof argv.logLevel !== 'undefined') {
-    //set log level to the one which was set via args
-    Utils.logger().setLevel(argv.logLevel);
-} else {
-    //set production log level to 4
-    Utils.logger().setLevel(4);
-}
 
 function setupClient() {
     Server.spawnSocketServer('client');

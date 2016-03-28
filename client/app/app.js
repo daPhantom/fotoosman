@@ -1,3 +1,5 @@
+process.env.role = 'client';
+
 var $ = jQuery = require('jquery');
 
 global.$ = $;

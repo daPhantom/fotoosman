@@ -1,7 +1,7 @@
 "use strict";
 
 //Load dependencies
-var Utils = require('../utils.js'),
+var Utils = require('../../../shared/utils'),
     YouTubeAPI = require('youtube-api');
 
 //Constructor
@@ -25,7 +25,7 @@ YouTube.prototype = {
             id: code
         }, function(err, data) {
             if (err) {
-                Utils.logger().error(err);
+                Logger.error(err);
                 return false;
             }
 
