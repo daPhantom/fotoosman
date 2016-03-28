@@ -2,7 +2,6 @@
 
 //Load dependencies
 var Utils = require('../utils.js'),
-    Videos = require('../videos.js'),
     YouTubeAPI = require('youtube-api');
 
 //Constructor
