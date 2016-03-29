@@ -7,8 +7,7 @@ var Env = require('shared/env'),
     VideoManager = require('./app/videoManager'),
     Elements = require('./app/elements'),
     Masonry = require('masonry-layout'),
-    Moment = require('moment'),
-    url = require('url');
+    Moment = require('moment');
 
 require('moment-duration-format');
 
