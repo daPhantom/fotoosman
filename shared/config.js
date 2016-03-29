@@ -4,8 +4,7 @@
  * Config class to gain access to config variables via Config.get("xxx").
  */
 
-var extend = require('extend'),
-    Env = require('./env');
+var Env = require('./env');
 
 var config = {
     'development': {
