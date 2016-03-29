@@ -1,7 +1,7 @@
 "use strict";
 
 //Load dependencies
-var Logger = require('./logger'),
+var Logger = require('shared/logger'),
     Videos = require('./videos');
 
 //Constructor

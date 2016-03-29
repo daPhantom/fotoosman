@@ -20,7 +20,7 @@
  */
 
 var argv = require('minimist')(process.argv.slice(2)),
-    Config = require('../../shared/config'),
+    Config = require('./config'),
     loglevel = require('loglevel'),
     moment = require('moment');
 

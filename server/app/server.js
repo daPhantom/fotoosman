@@ -1,7 +1,7 @@
 "use strict";
 
-var Config = require('../../shared/config'),
-    Logger = require('./logger'),
+var Config = require('shared/config'),
+    Logger = require('shared/logger'),
     HTTP = require('http'),
     URL = require('url'),
     SockJS = require('sockjs');

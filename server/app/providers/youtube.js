@@ -1,8 +1,7 @@
 "use strict";
 
 //Load dependencies
-var Utils = require('../../../shared/utils'),
-    YouTubeAPI = require('youtube-api');
+var YouTubeAPI = require('youtube-api');
 
 //Constructor
 function YouTube() {

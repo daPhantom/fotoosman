@@ -30,7 +30,9 @@ function VideoManager() {
                     $('#grid').prepend(Elements.videoEntry(video));
                     self.videos[video.code] = video;
                 });
-                self.play(self.videos[message.currentVideo].code, false, self.videos[message.currentVideo].elapsed);
+                if(message.currentVideo) {
+                    self.play(self.videos[message.currentVideo].code, false, self.videos[message.currentVideo].elapsed);
+                }
                 break;
         }
     });

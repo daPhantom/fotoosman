@@ -1,9 +1,8 @@
 "use strict";
 
 //Load dependencies
-var Utils = require('../../shared/utils.js'),
-    Moment = require('moment'),
-    YouTube = require('./providers/youtube.js');
+var moment = require('moment'),
+    YouTube = require('./providers/youtube');
 
 //Constructor
 function Videos(board) {
@@ -81,7 +80,7 @@ Videos.prototype = {
                 var video = {
                     code: data.id,
                     title: data.snippet.title,
-                    duration: Moment.duration(data.contentDetails.duration).asSeconds(),
+                    duration: moment.duration(data.contentDetails.duration).asSeconds(),
                     thumb: data.snippet.thumbnails.medium.url,
                     elapsed: 0
                 };

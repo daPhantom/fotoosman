@@ -1,14 +1,14 @@
-process.env.role = 'client';
-
 var $ = jQuery = require('jquery');
 
 global.$ = $;
 
-var Client = require('./client'),
-    VideoManager = require('./videoManager'),
-    Elements = require('./elements'),
+var Env = require('shared/env'),
+    Client = require('./app/client'),
+    VideoManager = require('./app/videoManager'),
+    Elements = require('./app/elements'),
     Masonry = require('masonry-layout'),
-    Moment = require('moment');
+    Moment = require('moment'),
+    url = require('url');
 
 require('moment-duration-format');
 

@@ -1,12 +1,9 @@
 "use strict";
 
-process.env.role = 'server';
-
-var Utils = require('../../shared/utils'),
-    Logger = require('./logger'),
-    Config = require('../../shared/config'),
-    Board = require('./board'),
-    Server = require('./server');
+var Logger = require('shared/logger'),
+    Config = require('shared/config'),
+    Board = require('./app/board'),
+    Server = require('./app/server');
 
 function setupClient() {
     Server.spawnSocketServer('client');

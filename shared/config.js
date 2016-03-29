@@ -5,15 +5,46 @@
  */
 
 var extend = require('extend'),
-    Utils = require('./utils.js');
+    Env = require('./env');
+
+var config = {
+    'development': {
+        "host": "http:\/\/localhost",
+        "ports": [7005],
+        "port": 7005,
+        "boards": [
+            "random",
+            "music",
+            "fun"
+        ],
+        "loglevel": 0
+    },
+    'beta': {
+        "host": "http:\/\/beta.fotoosman.de",
+        "ports": [7005],
+        "port": 7005,
+        "boards": [
+            "random",
+            "music",
+            "fun"
+        ],
+        "loglevel": 0
+    },
+    'production': {
+        "host": "http:\/\/fotoosman.de",
+        "ports": [7005],
+        "port": 7005,
+        "boards": [
+            "random",
+            "music",
+            "fun"
+        ],
+        "loglevel": 4
+    }
+};
 
 function Config() {
-    var sharedPath = '../config/shared/' + Utils.env + '.json',
-    localPath = '../config/' + process.env.role + '/' + Utils.env + '.json',
-    shared = require(sharedPath),
-    local = require(localPath);
-
-    this.config = extend(true, shared, local);
+    this.config = config[Env.env];
 }
 
 Config.prototype = {
