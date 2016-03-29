@@ -1,7 +1,7 @@
 'use strict';
 
 var SockJS = require('sockjs-client'),
-    Config = require('../../shared/config');
+    Config = require('shared/config');
 
 function Client() {
     this.socket = null;

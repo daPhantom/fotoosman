@@ -28,7 +28,7 @@
   "homepage": "https://github.com/daPhantom/fotoosman#readme",
   "scripts": {
     "setup": "node installer.js",
-    "build": "browserify -t brfs app.js -o public/js/bundle.js --full-path=false --environment=development",
-    "watch": "watchify -t brfs app.js -o public/js/bundle.js --debug --verbose --full-path=false --environment=development"
+    "build": "browserify -t brfs app.js -o public/js/bundle.js --full-path=false",
+    "watch": "watchify -t brfs app.js -o public/js/bundle.js --debug --verbose --full-path=false"
   }
 }

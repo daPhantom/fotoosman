@@ -28,15 +28,15 @@ function setupBoards() {
         var board = new Board(name);
         Server.spawnSocketServer(name);
 
-        Server.on('open', 'board-random', 'app', function(connection) {
+        Server.on('open', name, 'app', function(connection) {
             board.addConnection(connection);
         });
 
-        Server.on('close', 'board-random', 'app', function(connection) {
+        Server.on('close', name, 'app', function(connection) {
             board.removeConnection(connection);
         });
 
-        Server.on('message', 'board-random', 'app', function(connection, message) {
+        Server.on('message', name, 'app', function(connection, message) {
             board.handleIncomingClientMessage(connection, message)
         });
     });
