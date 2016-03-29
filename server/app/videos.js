@@ -15,6 +15,18 @@ function Videos(board) {
 
 //Functions
 Videos.prototype = {
+    handleIncomingClientMessage: function(conn, msg) {
+        switch (msg.type) {
+            case 'videos.add':
+                this.add(msg.url);
+                break;
+
+            case 'videos.switch':
+                this.switch(msg.code);
+                break;
+        }
+    },
+
     all: function() {
         var videoArr = [];
 

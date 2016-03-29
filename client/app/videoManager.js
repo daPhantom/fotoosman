@@ -72,7 +72,7 @@ VideoManager.prototype = {
 
     sendVideoToServer: function(url) {
         var message = {
-            type: "add",
+            type: "videos.add",
             url: url
         };
 
@@ -81,7 +81,7 @@ VideoManager.prototype = {
 
     sendSwitchToServer: function(code) {
         var message = {
-            type: "switch",
+            type: "videos.switch",
             code: code
         };
 

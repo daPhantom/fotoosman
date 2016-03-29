@@ -2,12 +2,14 @@
 
 //Load dependencies
 var Logger = require('shared/logger'),
-    Videos = require('./videos');
+    Videos = require('./videos'),
+    Chat = require('./chat');
 
 //Constructor
 function Board(name) {
     this.clients = new Map();
-    this.videos = new Videos(this)
+    this.videos = new Videos(this);
+    this.chat = new Chat(this);
 }
 
 //Functions
@@ -15,15 +17,13 @@ Board.prototype = {
     handleIncomingClientMessage: function(conn, msg) {
         var self = this;
 
-        switch (msg.type) {
-            case 'add':
-                self.videos.add(msg.url);
+        switch (true) {
+            case /videos\./.test(msg.type):
+                this.videos.handleIncomingClientMessage(conn, msg);
                 break;
-
-            case 'switch':
-                self.videos.switch(msg.code);
+            case /chat\./.test(msg.type):
+                this.chat.handleIncomingClientMessage(conn, msg);
                 break;
-
             default:
                 Logger.warn('received unknown incoming subscribe message from type ' + msg.type);
                 break;
@@ -39,6 +39,11 @@ Board.prototype = {
             type: "videos",
             videos: self.videos.all(),
             currentVideo: self.videos.getCurrentVideo()
+        };
+        self.sendToClient(conn, msg);
+        var msg = {
+            type: "chat",
+            messages: self.chat.all(),
         };
         self.sendToClient(conn, msg);
     },
