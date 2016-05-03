@@ -36,7 +36,7 @@ Server.prototype = {
 
     bindHttpListeners: function(request, response) {
         response.writeHead(200, {
-            'Content-type': 'text/plain',
+            'Content-type': 'text/html; charset:utf-8',
             'Access-Control-Allow-Origin': '*'
         });
 
