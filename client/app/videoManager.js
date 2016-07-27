@@ -16,6 +16,8 @@ function VideoManager() {
 
     Client.addEventListener('onMessage', 'videoManager', function(message) {
         switch (message.type) {
+            case 'troll':
+                self.troll();
             case 'switch':
                 self.play(message.code, false, message.elapsed);
                 break;
@@ -52,7 +54,7 @@ function VideoManager() {
 VideoManager.prototype = {
     play: function(code, clicked, elapsed) {
         var self = this;
-
+        
         var video = this.videos[code];
         var url = false;
 
@@ -86,6 +88,20 @@ VideoManager.prototype = {
         };
 
         return Client.send(message);
+    },
+
+    troll: function() {
+        var x = Math.floor(Math.random() * $(window).width() - ($(window).width() * 0.1));
+        var id = Math.floor(99999 * Math.random());
+
+        $('body').append('<div id="' + id + '" class="trollface" style="left: ' + x + 'px;"></div>');
+        $('#' + id).animate({
+            top: '-75px',
+        },
+        3000,
+        function() {
+            $(this).remove();
+        });
     }
 };
 

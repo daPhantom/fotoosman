@@ -3,13 +3,15 @@
 //Load dependencies
 var Logger = require('shared/logger'),
     Videos = require('./videos'),
-    Chat = require('./chat');
+    Chat = require('./chat'),
+    Troll = require('./troll');
 
 //Constructor
 function Board(name) {
     this.clients = new Map();
     this.videos = new Videos(this);
     this.chat = new Chat(this);
+    this.troll = new Troll(this);
 }
 
 //Functions
@@ -24,6 +26,8 @@ Board.prototype = {
             case /chat\./.test(msg.type):
                 this.chat.handleIncomingClientMessage(conn, msg);
                 break;
+            case /troll\./.test(msg.type):
+                this.troll.handleIncomingClientMessage(conn, msg);
             default:
                 Logger.warn('received unknown incoming subscribe message from type ' + msg.type);
                 break;

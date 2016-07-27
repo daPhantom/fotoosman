@@ -29,6 +29,12 @@ $(document).ready(function() {
         columnWidth: 196
     });
 
+    $('#troll').click(function() {
+        Client.send({
+            type: "troll.troll"
+        })
+    });
+
     function showLoader() {
         $('#loader').modal();
     }

@@ -18,3 +18,13 @@
 .grid-item.yp {
     background-size: cover;
 }
+
+.trollface {
+    position: absolute;
+    z-index: 999;
+    background-image: url('/img/trollface-white.png');
+    width: 100px;
+    height: 75px;
+    background-size: contain;
+    bottom: -75px;
+}
