@@ -64,15 +64,21 @@
         }(document, 'script', 'facebook-jssdk'));
     </script>
 
-    <div style="width: 100%; height: 100%; border: 0px;">
-        <div class="input-group" style="width: 95%; padding: 5px;">
-            <span class="input-group-addon glyphicon glyphicon-film" id="basic-addon1"></span>
-            <input id="input" type="text" class="form-control" placeholder="Paste YouTube URL" aria-describedby="basic-addon1">
+    <div style="width: 100%; height: 100%; border: 0px; padding: 5px;">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="input-group" style="width: 100%;">
+                    <input id="input" type="text" class="form-control" placeholder="Paste YouTube URL" style="width: 100%">
+                </div>
+             </div>
+          <div class="col-lg-3">
+            <div class="input-group">
+                <button id="troll" name="troll" style="height: 34px;">Troll!</button>
+            </div>
+          </div>
         </div>
 
         <iframe id="video" style="width: 100%; height: 70%;" src="" frameborder="0"></iframe>
-
-        <button id="troll" name="troll">Troll!</button>
 
         <div style="width: 100%; text-align: center; padding: 10px">
             Currently playing: <span id="title"></span>
