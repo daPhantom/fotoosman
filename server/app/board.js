@@ -2,98 +2,82 @@
 
 //Load dependencies
 var Logger = require('shared/logger'),
-    Videos = require('./videos'),
-    Chat = require('./chat'),
-    Troll = require('./troll');
+  Messenger = require('shared/Messenger'),
+  Videos = require('./videos'),
+  VideosMessage = require('shared/messages/Videos'),
+  Chat = require('./chat'),
+  Troll = require('./troll');
 
 //Constructor
 function Board(name) {
-    this.clients = new Map();
-    this.videos = new Videos(this);
-    this.chat = new Chat(this);
-    this.troll = new Troll(this);
+  this.messenger = new Messenger();
+  this.clients = new Map();
+  this.videos = new Videos(this);
+  this.chat = new Chat(this);
+  this.troll = new Troll(this);
 }
 
 //Functions
 Board.prototype = {
-    handleIncomingClientMessage: function(conn, msg) {
-        var self = this;
+  onMessage: function(conn, msg) {
+    var self = this;
 
-        switch (true) {
-            case /videos\./.test(msg.type):
-                this.videos.handleIncomingClientMessage(conn, msg);
-                break;
-            case /chat\./.test(msg.type):
-                this.chat.handleIncomingClientMessage(conn, msg);
-                break;
-            case /troll\./.test(msg.type):
-                this.troll.handleIncomingClientMessage(conn, msg);
-            default:
-                Logger.warn('received unknown incoming subscribe message from type ' + msg.type);
-                break;
-        }
-    },
+    this.messenger.receive(conn, msg);
+    //
+    // switch (true) {
+    //   case /videos\./.test(msg.type):
+    //     this.videos.handleIncomingClientMessage(conn, msg);
+    //     break;
+    //   case /chat\./.test(msg.type):
+    //     this.chat.handleIncomingClientMessage(conn, msg);
+    //     break;
+    //   case /troll\./.test(msg.type):
+    //     this.troll.handleIncomingClientMessage(conn, msg);
+    //   default:
+    //     Logger.warn(
+    //       'received unknown incoming subscribe message from type ' +
+    //       msg.type
+    //     );
+    //     break;
+    // }
+  },
 
-    addConnection: function(conn) {
-        var self = this;
+  addConnection: function(conn) {
+    var self = this;
 
-        self.clients.set(conn.id, conn);
-        Logger.info("adding new client to list with connection " + conn.id);
-        var msg = {
-            type: "videos",
-            videos: self.videos.all(),
-            currentVideo: self.videos.getCurrentVideo()
-        };
-        self.sendToClient(conn, msg);
-        var msg = {
-            type: "chat",
-            messages: self.chat.all(),
-        };
-        self.sendToClient(conn, msg);
-    },
+    self.clients.set(conn.id, conn);
+    Logger.info("adding new client to list with connection " + conn.id);
+    var msg = new VideosMessage(this.videos.all(), this.videos.getCurrentVideo());
+    self.sendToClient(conn, msg);
+  },
 
-    broadcast: function(message) {
-        for (var connId of this.clients.keys()) {
-            var conn = this.clients.get(connId);
-            if (!this.sendToClient(conn, message)) {
-                this.removeConnection(conn);
-                //break;
-            }
-        }
-    },
+  broadcast: function(message) {
+    for (var connId of this.clients.keys()) {
+      var conn = this.clients.get(connId);
+      if (!this.sendToClient(conn, message)) {
+        this.removeConnection(conn);
+        //break;
+      }
+    }
+  },
 
-    sendToClient: function(conn, message) {
-        if (conn.writable) {
-            if (typeof message !== 'string') {
-                try {
-                    message = JSON.stringify(message);
-                } catch (e) {
-                    Logger.error("error stringifying message: " + e.message);
-                    return false;
-                }
-            }
+  sendToClient: function(conn, message) {
+    return this.messenger.send(conn, message);
+  },
 
-            Logger.info("sending message to connection " + conn.id + " with data: " + message);
+  removeConnection: function(conn) {
+    if (this.clients.has(conn.id)) {
+      var id = conn.id;
 
-            return conn.write(message);
-        }
+      //close connection
+      conn.close();
+      conn = null;
 
-        return false;
-    },
+      this.clients.delete(id);
 
-    removeConnection: function(conn) {
-        if (this.clients.has(conn.id)) {
-            var id = conn.id;
-
-            //close connection
-            conn.close();
-            conn = null;
-
-            this.clients.delete(id);
-
-            Logger.info('removed dead connection ' + id);
-        }
-    },
+      Logger.info('removed dead connection ' + id);
+    }
+  },
 };
 
 module.exports = Board;
