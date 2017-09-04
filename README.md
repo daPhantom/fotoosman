@@ -46,4 +46,4 @@ npm run build
 http-server public/ --cors
 ```
 
-Open 127.0.0.1:8080 in your Internet Explorer
+>   Open 127.0.0.1:8080 in your Internet Explorer
