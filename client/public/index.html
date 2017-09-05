@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html style="height: 100%; width: 100%;" lang="en">
+<html lang="en">
 
 <head>
     <title>Foto Osman</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <META NAME="Description" CONTENT="Foto Osman gibt Dir den Kick!">
     <META http-equiv="Content-Type" CONTENT="text/html; charset=utf-8">
     <META NAME="robots" CONTENT="nofollow">
@@ -32,7 +33,7 @@
     </script>
 </head>
 
-<body style="margin: 0; background-color:#000; height: 100%; width: 100%; color: #000">
+<body>
     <div id="loader" class="modal fade" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" style="background-color: #fff">
             <div class="modal-header">
@@ -64,27 +65,34 @@
         }(document, 'script', 'facebook-jssdk'));
     </script>
 
-    <div style="width: 100%; height: 100%; border: 0px; padding: 5px;">
-        <div class="row">
-            <div class="col-lg-9">
-                <div class="input-group" style="width: 100%;">
-                    <input id="input" type="text" class="form-control" placeholder="Paste YouTube URL" style="width: 100%">
+    <div class="container-fluid" style="height: 100vh;">
+        <div class="row" style="padding: 10px;">
+            <div class="col-xs-10 col-md-11">
+                <div class="input-group">
+                    <input id="input" type="text" class="form-control" placeholder="Paste YouTube URL" style="height: 34px;">
                 </div>
              </div>
-          <div class="col-lg-3">
-            <div class="input-group">
-                <button id="troll" name="troll" style="height: 34px;">Troll!</button>
-            </div>
+          <div class="col-xs-2 col-md-1">
+                <div id="troll" name="troll" class="text-center">Troll!</div>
           </div>
         </div>
 
-        <iframe id="video" style="width: 100%; height: 70%;" src="" frameborder="0"></iframe>
-
-        <div style="width: 100%; text-align: center; padding: 10px">
-            Currently playing: <span id="title"></span>
+        <div class="row" style="height: 75vh;">
+            <div class="col-xs-12" style="height: 100%;">
+                <iframe id="video" style="width: 100%; height: 100%;" src="" frameborder="0"></iframe>
+            </div>
         </div>
-        <div id="grid" class="cols">
-            <!-- JS MAGIC HAPPENS HERE -->
+
+        <div class="row" style="height: 34px;">
+            <div class="col-xs-12 text-center" style="line-height: 34px;">
+                Currently playing: <span id="title"></span>
+            </div>
+        </div>
+
+        <div class="row" style="height: 25hv;">
+            <div id="grid" class="cols col-lg-12">
+                <!-- JS MAGIC HAPPENS HERE -->
+            </div>
         </div>
     </div>
 

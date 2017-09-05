@@ -1,3 +1,44 @@
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: #FF00FF;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color: rgb(32,32,32);
+   opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color: rgb(32,32,32);
+   opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: rgb(32,32,32);
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+   color: rgb(32,32,32);
+}
+
+body {
+    background-color: rgb(32,32,32);
+    color: #FFF;
+    overflow: hidden;
+}
+
+#troll {
+    height: 34px;
+    line-height: 34px;
+    background-color: #fafafa;
+    color: rgb(32,32,32);
+    min-width: 42px;
+}
+
+.input-group {
+    color: rgb(32,32,32);
+    display: block;
+}
+
 #grid {
     width: 100%;
 }
