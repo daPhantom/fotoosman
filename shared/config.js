@@ -8,7 +8,7 @@ var Env = require('./env');
 
 var config = {
   'development': {
-    "host": "http:\/\/192.168.2.104",
+    "host": "http:\/\/127.0.0.1",
     "ports": [7005],
     "port": 7005,
     "boards": [
