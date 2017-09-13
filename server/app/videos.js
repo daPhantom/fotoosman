@@ -2,19 +2,44 @@
 
 //Load dependencies
 var moment = require('moment'),
-  YouTube = require('./providers/youtube');
+  YouTube = require('./providers/youtube'),
+  fs = require('fs'),
+  JsonHelper = require('shared/jsonHelper');
 
 //Constructor
 function Videos(board) {
-  this.board = board;
-  this.currentVideo = false;
-  this.videos = new Map();
+  var self = this;
 
-  this.loop();
+  self.dumpFile = process.cwd() + '/dump/' + board.name + '.json';
+
+  self.board = board;
+  self.currentVideo = false;
+  self.videos = new Map();
+
+  self.restoreDump();
+
+  self.loop();
+
+  setTimeout(function() {
+    self.dump();
+  }, 60000);
 }
 
 //Functions
 Videos.prototype = {
+  restoreDump: function() {
+    var self = this;
+
+    fs.readFile(self.dumpFile, 'utf8', function(err, data) {
+      if (err) {
+        return console.log(err);
+      }
+      self.videos = JsonHelper.jsonToStrMap(data);
+
+      console.log("Restored videos for " + self.board.name + " successfuly");
+    });
+  },
+
   handleIncomingClientMessage: function(conn, msg) {
     switch (msg.type) {
       case 'videos.add':
@@ -151,11 +176,32 @@ Videos.prototype = {
         this.videos.get(this.currentVideo).elapsed = 0;
         this.changeCurrentVideo(this.random());
       }
+    } else if (this.videos.size > 0) {
+      this.currentVideo = this.random().code;
     }
 
     setTimeout(function() {
       self.loop()
     }, 1000);
+  },
+
+  dump: function() {
+    var self = this;
+
+    var path = process.cwd();
+
+    fs.writeFile(path + "/dump/" + self.board.name + ".json", JsonHelper.strMapToJson(this.videos),
+      function(err) {
+        if (err) {
+          return console.log(err);
+        }
+
+        console.log("Videos for board " + self.board.name + " dumped successfuly");
+      });
+
+    setTimeout(function() {
+      self.dump();
+    }, 60000);
   }
 };
 
